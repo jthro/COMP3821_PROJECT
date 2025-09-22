@@ -1,0 +1,88 @@
+% arara: latexmk: {engine: lualatex, options: ["-synctex=1"]}
+\documentclass[12pt]{article}
+\usepackage{tikz}
+\usetikzlibrary{positioning, shapes.geometric, calc}
+\usepackage{textcomp}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage[a4paper, headheight=5pt, margin=20mm, left=20mm, right=20mm]{geometry}
+\usepackage{fancyhdr}
+\usepackage{amsmath}
+\usepackage{nameref}
+\usepackage{tabularray} 
+\UseTblrLibrary{varwidth}
+\usepackage{enumitem} % no indent on enumitems
+% \UseTblrLibrary{booktabs, siunitx, mathtools, varwidth}
+\usepackage{pdflscape}
+\usepackage{amssymb}
+\usepackage{wasysym}
+\usepackage{siunitx}
+\usepackage{paracol}
+\usepackage[hidelinks]{hyperref}
+\usepackage[backend=biber]{biblatex}
+\usepackage{pdfpages}
+%\usepackage[style=ddmmyyyy,datesep=/]{datetime2}
+\usepackage{parskip}
+\usepackage{bytefield} % Looks nice in part 3.4.1 (insn encoding)
+\usepackage{subcaption} % Looks nice in part 3.4.1 (insn encoding, subfigures)
+
+%%%%%%% Probably remove this.. just for to-dos
+\usepackage{tcolorbox} % Used for the to-do's
+\tcbset{colback=red!5!white,colframe=red!75!black,fonttitle=\bfseries}
+%%%%%%%
+
+\sisetup{detect-all}
+\addbibresource{bibliography.bib}
+\graphicspath{{./assets/}}
+\hypersetup{
+    colorlinks=false,
+    pdftitle={COMP3821 Proposal},
+}
+
+%------------------------------
+% Headers
+%------------------------------
+\fancyhead{}
+\renewcommand{\headrulewidth}{0pt}
+\cfoot{Page \thepage}
+\pagestyle{fancy}
+
+\fancypagestyle{lscape}{%
+  \fancyhf{}
+  \cfoot{\tikz[remember picture,overlay]
+      \node[outer sep=1cm,above,rotate=90] at (current page.east) 
+      {Page \thepage};
+  }
+}
+
+
+
+\begin{document}
+
+%------------------------------
+% Title page
+%------------------------------
+\begin{titlepage}
+\begin{tikzpicture}[remember picture,overlay]
+  \node[anchor=north west, inner sep=0pt] at (current page.north west) 
+    {\includegraphics[width=\paperwidth]{UNSW_bg.jpg}};
+\end{tikzpicture}
+
+\vspace*{\fill}
+\begin{center}
+    {\Huge\textbf{COMP3821 25T3 Proposal}}
+    
+    \vspace{1cm}{\huge{Faculty of Computer Science \& Engineering}} 
+
+    \vspace*{\fill}
+    
+    \large{\today}
+\end{center}
+\end{titlepage}
+
+%------------------------------
+% Sec; ToC 
+%------------------------------
+\tableofcontents
+
+\end{document}
