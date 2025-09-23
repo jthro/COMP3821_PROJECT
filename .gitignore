@@ -8,3 +8,4 @@
 *.xml
 *.gz
 *.toc
+!proposal_notes_jethro.pdf
