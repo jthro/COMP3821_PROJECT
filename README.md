@@ -19,6 +19,7 @@ Each stage we will simply make a new main branch.
 [Explanation on stationary distributions](https://brilliant.org/wiki/stationary-distributions/)\
 [Mixing time](https://en.wikipedia.org/wiki/Markov_chain_mixing_time)\
 [Total variation distance, 𝐿1 norm](https://math.stackexchange.com/questions/3415641/total-variation-distance-l1-norm)\
+[Path coupling MIT resource](https://people.csail.mit.edu/costis/6896sp11/lec6s.pdf)
 
 ##  Previous Ideas
 ### Time-inhomogeous markov chains
