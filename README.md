@@ -2,6 +2,9 @@
 Run `arara main.tex` to compile.
 Each stage we will simply make a new main branch.
 
+# Questions For Future 
+Is there a better heuristic for good and bad colourings when looking at path colourings (potential questions)?
+
 # Links
 [Rapid mixing of Glauber dynamics for colorings below Vigoda’s
 11/6 threshold](https://arxiv.org/pdf/1804.04025)\
