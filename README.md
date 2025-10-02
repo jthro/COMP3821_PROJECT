@@ -5,6 +5,9 @@ Each stage we will simply make a new main branch.
 # Questions For Future 
 Is there a better heuristic for good and bad colourings when looking at path colourings (potential questions)?
 
+# Gerald recordings
+[First recording](https://drive.google.com/file/d/14CPp2bjAKBil3FYkBjthggqdCXCwfAV_/view?usp=sharing)
+
 # Links
 [Rapid mixing of Glauber dynamics for colorings below Vigoda’s
 11/6 threshold](https://arxiv.org/pdf/1804.04025)\
