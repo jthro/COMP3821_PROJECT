@@ -8,6 +8,9 @@ Is there a better heuristic for good and bad colourings when looking at path col
 # Gerald recordings
 [First recording](https://drive.google.com/file/d/14CPp2bjAKBil3FYkBjthggqdCXCwfAV_/view?usp=sharing)
 
+# Meeting Notes
+[Week 3](meeting_notes/week_3.md)
+
 # Links
 [Rapid mixing of Glauber dynamics for colorings below Vigoda’s
 11/6 threshold](https://arxiv.org/pdf/1804.04025)\
