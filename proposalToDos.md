@@ -105,6 +105,7 @@ Come up with randomied algorithm for special case of problem - what we think the
 
 ## Other Stuff
 - Emdashes fix
+- Double check the paragraph bit still matches
 
 
 # Final Submission
