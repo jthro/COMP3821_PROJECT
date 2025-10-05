@@ -13,9 +13,9 @@
 - ~~Remarks on real world applications~~
 
 ### Theoretical Specific
-- ~~Special cases we have thought about or aim to solve.~~
+- ~~Special cases we have thought about or aim to solve.~~ Shay Ticked
 - ~~Preliminary Directions for the Project~~
-- Amibitious goals want to achieve by the end.
+- ~~Amibitious goals want to achieve by the end.~~ End of first paragraph of survey
 
 ###  Rubric Marking
 - The survey covers a wide range of sources and appropriately references them. The
