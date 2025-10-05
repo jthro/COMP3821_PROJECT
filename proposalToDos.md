@@ -43,13 +43,8 @@ realistic targets.~~
 - ~~Figure labels for Gannt chart~~
 
 ### From Rubric
-- ~~Appropriate use of section and sub-section heading structures. Figures and diagrams
-are labelled, formatting is consistent, references in text match reference list (and vice
-versa), pictures are clear and attributed, sections clearly labelled.~~
-- ~~Everything from above, and appropriate judgement in the placement data, tables or
-figures in the body of the work or the appendices. Figures and diagrams are correctly
-and clearly labelled, text spacing aids readability, consistent formatting. Text is clear
-and concise.~~
+- ~~Appropriate use of section and sub-section heading structures. Figures and diagrams are labelled, formatting is consistent, references in text match reference list (and vice versa), pictures are clear and attributed, sections clearly labelled.~~
+- ~~Everything from above, and appropriate judgement in the placement data, tables or figures in the body of the work or the appendices. Figures and diagrams are correctly and clearly labelled, text spacing aids readability, consistent formatting. Text is clear and concise.~~
 
 # Based on General Project Rubric
 - ~~Proposals should be roughly 2 to 3 pages in length~~
@@ -65,7 +60,7 @@ and concise.~~
 - ~~What are the state of art~~
     - ~~State them~~
 - ~~State conjectures~~
-    - Why true, false, probably true
+    - ~~Why true, false, probably true~~
 - ~~If you think there is a special case of the problem state that~~
 - Come up with randomied algorithm for special case of problem - what we think the solution would be 
 
@@ -90,7 +85,7 @@ and concise.~~
 
 ### Flip Dynamics
 - ~~P1~~
-- P2
+- ~~P2~~
 
 #### Proving rapid mixing ...
 - ~~Coupling~~
@@ -98,6 +93,7 @@ and concise.~~
 
 ### Applications 
 - ~~P1 Needs to be written as a paragraph / sourced.~~
+- ~~P2~~
 
 ### Special Cases 
 - P1 Might need more sources / to be written in the style of the survey section.
