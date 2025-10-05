@@ -28,7 +28,7 @@
 - ~~Goals aim to achieve by Week 10~~ - Someone heck both of these
 - ~~Realistic~~
 - ~~Confines of project timeline~~
-- Tie in well with the survey
+- ~~Tie in well with the survey~~
 
 ### From Rubric
 - ~~Project aims and plan are clearly presented and detailed, and tie in well with the survey
@@ -56,7 +56,7 @@ and concise.~~
 - Include a self-contained statement of the proposed topic, 
 - ~~A brief survey of the topic (including any currently known results and conjectures left unresolved)~~
 - ~~A potential approach to the problem (or more),~~
-- One or two ideas that might not work.
+- ~~One or two ideas that might not work.~~
 - ~~Where possible, include a discussion on any real-world applications.~~
 
 # Based On Gerald Feedback
@@ -67,7 +67,7 @@ and concise.~~
 - ~~State conjectures~~
     - Why true, false, probably true
 - If you think there is a special case of the problem state that
-Come up with randomied algorithm for special case of problem - what we think the solution would be 
+- Come up with randomied algorithm for special case of problem - what we think the solution would be 
 
 
 # Based on Paragraph Readthrough
@@ -75,7 +75,7 @@ Come up with randomied algorithm for special case of problem - what we think the
 - ~~P1~~
 - P2 Needs Sources, especially for the first half
 - ~~P3~~
-- P4 Unclear and Needs sources
+- ~~P4 Unclear and Needs sources~~
 
 ## Background
 ### Mixing Time 
@@ -85,7 +85,7 @@ Come up with randomied algorithm for special case of problem - what we think the
 - ~~Done~~ Shay Ticked
 
 ## Survey
-- P1
+- ~~P1~~
 
 ### Flip Dynamics
 - P1
@@ -96,7 +96,7 @@ Come up with randomied algorithm for special case of problem - what we think the
 - Path Coupling
 
 ### Applications 
-- P1 Needs to be written as a paragraph / sourced.
+- ~~P1 Needs to be written as a paragraph / sourced.~~
 
 ### Special Cases 
 - P1 Might need more sources / to be written in the style of the survey section.
@@ -116,7 +116,7 @@ Come up with randomied algorithm for special case of problem - what we think the
 - Double check all sources are actually used maybe alphabetise too?
 
 ## Other Stuff
-- Emdashes fix
+- ~~Emdashes fix~~
 - Double check the paragraph bit still matches
 
 
