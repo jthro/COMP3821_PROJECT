@@ -19,10 +19,8 @@
 
 ###  Rubric Marking
 - ~~The survey covers a wide range of sources and appropriately references them.~~ 
-- The
-students have explained their motivation for the topic 
-- And provided well researched
-detail on potential real world applications where applicable.
+- ~~The students have explained their motivation for the topic~~
+- And provided well researched detail on potential real world applications where applicable.
 
 ## Research Plan
 - ~~Outlines what aims to be done by the end of each milestone~~
