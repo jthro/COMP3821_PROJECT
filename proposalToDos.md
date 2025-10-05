@@ -31,9 +31,9 @@
 - Tie in well with the survey
 
 ### From Rubric
-- Project aims and plan are clearly presented and detailed, and tie in well with the survey
+- ~~Project aims and plan are clearly presented and detailed, and tie in well with the survey
 of the topic. The project plan demonstrates a logical and feasible course of action, with
-realistic targets.
+realistic targets.~~
 
 ## Bibliography 
 - ~~Where appropriate~~
