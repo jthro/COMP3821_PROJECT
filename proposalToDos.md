@@ -37,6 +37,7 @@ realistic targets.~~
 
 ## Bibliography 
 - ~~Where appropriate~~
+- Fix formatting, e.g. Last name, First Name + make alpha order
 
 ## Presentation
 - Figure labels for Gannt chart
