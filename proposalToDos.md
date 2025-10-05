@@ -20,7 +20,7 @@
 ###  Rubric Marking
 - ~~The survey covers a wide range of sources and appropriately references them.~~ 
 - ~~The students have explained their motivation for the topic~~
-- And provided well researched detail on potential real world applications where applicable.
+- ~~And provided well researched detail on potential real world applications where applicable.~~
 
 ## Research Plan
 - ~~Outlines what aims to be done by the end of each milestone~~
@@ -62,8 +62,8 @@ and concise.~~
 # Based On Gerald Feedback
 - ~~Define problem - define introduction and motiviation for use of markov chains for k coloring problem~~
 - Propose randomised algorithm for that problem
-- What are the state of art
-    - State them
+- ~~What are the state of art~~
+    - ~~State them~~
 - ~~State conjectures~~
     - Why true, false, probably true
 - ~~If you think there is a special case of the problem state that~~
@@ -86,9 +86,10 @@ and concise.~~
 
 ## Survey
 - ~~P1~~
+- ~~P2~~
 
 ### Flip Dynamics
-- P1
+- ~~P1~~
 - P2
 
 #### Proving rapid mixing ...
