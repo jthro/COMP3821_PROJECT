@@ -2,7 +2,7 @@
 ## Cover Page
 - ~~Contains topic title names ane zIDs and mentor name~~
 ## Introduction
-- Brief: Shay thinks so maybe confirm
+- ~~Brief:~~ Shay thinks so maybe confirm
 - ~~Outline and Motivates Choosen Topic~~
 - ~~Describes the nature of the topic~~
 - ~~Clearly theortical~~
