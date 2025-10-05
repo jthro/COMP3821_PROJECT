@@ -66,14 +66,14 @@ and concise.~~
     - State them
 - ~~State conjectures~~
     - Why true, false, probably true
-- If you think there is a special case of the problem state that
+- ~~If you think there is a special case of the problem state that~~
 - Come up with randomied algorithm for special case of problem - what we think the solution would be 
 
 
 # Based on Paragraph Readthrough
 ## Intro
 - ~~P1~~
-- P2 Needs Sources, especially for the first half
+- ~~P2 Needs Sources, especially for the first half~~
 - ~~P3~~
 - ~~P4 Unclear and Needs sources~~
 
@@ -110,10 +110,10 @@ and concise.~~
 - ~~P2 / P3~~
 - ~~Dot Points~~
 - ~~Progression / Submissions Bit: Formatting needs fixed~~
-- Gantt Chart needs sourced
+- ~~Gantt Chart needs sourced~~
 
 ### Bibliography
-- Double check all sources are actually used maybe alphabetise too?
+- ~~Double check all sources are actually used maybe alphabetise too?~~
 
 ## Other Stuff
 - ~~Emdashes fix~~
