@@ -18,8 +18,10 @@
 - ~~Amibitious goals want to achieve by the end.~~ End of first paragraph of survey
 
 ###  Rubric Marking
-- The survey covers a wide range of sources and appropriately references them. The
-students have explained their motivation for the topic, and provided well researched
+- ~~The survey covers a wide range of sources and appropriately references them.~~ 
+- The
+students have explained their motivation for the topic 
+- And provided well researched
 detail on potential real world applications where applicable.
 
 ## Research Plan
