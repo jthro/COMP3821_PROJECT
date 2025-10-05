@@ -13,7 +13,7 @@
 - ~~Remarks on real world applications~~
 
 ### Theoretical Specific
-- Special cases we have thought about or aim to solve.
+- ~~Special cases we have thought about or aim to solve.~~
 - ~~Preliminary Directions for the Project~~
 - Amibitious goals want to achieve by the end.
 
@@ -96,6 +96,9 @@ Come up with randomied algorithm for special case of problem - what we think the
 
 ### Applications 
 - P1 Needs to be written as a paragraph / sourced.
+
+### Special Cases 
+- P1 Might need more sources / to be written in the style of the survey section.
 
 ## Plan
 ### Our Problem
