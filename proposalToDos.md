@@ -24,8 +24,8 @@ detail on potential real world applications where applicable.
 
 ## Research Plan
 - ~~Outlines what aims to be done by the end of each milestone~~
-- Goals aim to achieve by Week 7
-- Goals aim to achieve by Week 10
+- ~~Goals aim to achieve by Week 7~~
+- ~~Goals aim to achieve by Week 10~~ - Someone heck both of these
 - ~~Realistic~~
 - ~~Confines of project timeline~~
 - Tie in well with the survey
