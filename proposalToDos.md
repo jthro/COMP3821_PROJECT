@@ -50,6 +50,14 @@ figures in the body of the work or the appendices. Figures and diagrams are corr
 and clearly labelled, text spacing aids readability, consistent formatting. Text is clear
 and concise.
 
+# Based on General Project Rubric
+- Proposals should be roughly 2 to 3 pages in length 
+- Include a self-contained statement of the proposed topic, 
+- A brief survey of the topic (including any currently known results and conjectures left unresolved), 
+- A potential approach to the problem (or more), 
+- One or two ideas that might not work.
+- Where possible, include a discussion on any real-world applications.
+
 # Based On Gerald Feedback
 - ~~Define problem - define introduction and motiviation for use of markov chains for k coloring problem~~
 - Propose randomised algorithm for that problem
