@@ -92,8 +92,8 @@ and concise.~~
 - P2
 
 #### Proving rapid mixing ...
-- Coupling
-- Path Coupling
+- ~~Coupling~~
+- ~~Path Coupling~~
 
 ### Applications 
 - ~~P1 Needs to be written as a paragraph / sourced.~~
@@ -103,13 +103,13 @@ and concise.~~
 
 ## Plan
 ### Our Problem
-- P1
+- ~~P1~~
 
 ### Our Approach
-- P1
-- P2 / P3
-- Dot Points
-- Progression / Submissions Bit: Formatting needs fixed
+- ~~P1~~
+- ~~P2 / P3~~
+- ~~Dot Points~~
+- ~~Progression / Submissions Bit: Formatting needs fixed~~
 - Gantt Chart needs sourced
 
 ### Bibliography
