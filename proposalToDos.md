@@ -68,6 +68,14 @@ Come up with randomied algorithm for special case of problem - what we think the
 - ~~P3~~
 - P4 Unclear and Needs sources
 
+## Background
+### Mixing Time 
+- ~~Done~~ Shay Ticked
+
+### Proper k-colouring
+- ~~Done~~ Shay Ticked
+
+
 ## Other Stuff
 
 # Final Submission
