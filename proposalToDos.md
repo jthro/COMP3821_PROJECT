@@ -75,8 +75,37 @@ Come up with randomied algorithm for special case of problem - what we think the
 ### Proper k-colouring
 - ~~Done~~ Shay Ticked
 
+## Survey
+- P1
+
+### Flip Dynamics
+- P1
+- P2
+
+#### Proving rapid mixing ...
+- Coupling
+- Path Coupling
+
+### Applications 
+- P1 Needs to be written as a paragraph / sourced.
+
+## Plan
+### Our Problem
+- P1
+
+### Our Approach
+- P1
+- P2 / P3
+- Dot Points
+- Progression / Submissions Bit: Formatting needs fixed
+- Gantt Chart needs sourced
+
+### Bibliography
+- Double check all sources are actually used maybe alphabetise too?
 
 ## Other Stuff
+- Emdashes fix
+
 
 # Final Submission
 - Submitted
