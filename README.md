@@ -13,7 +13,9 @@ Is there a better heuristic for good and bad colourings when looking at path col
 [Second recording](https://drive.google.com/file/d/17A603rJCj-S_WcI4ddvAq293GSXVTFGJ/view?usp=sharing)
 
 # Meeting Notes
-[Week 3](meeting_notes/week_3.md)
+[Week 3](meeting_notes/week_3.md)<br>
+[Week 4](meeting_notes/week_4.md)
+
 
 # Links
 [Rapid mixing of Glauber dynamics for colorings below Vigoda’s
