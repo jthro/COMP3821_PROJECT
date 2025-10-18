@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 import networkx as nx
 import random
+# import manim
 
 class Graph():
     def __init__(self, size):
@@ -59,25 +60,46 @@ def metropolis(graph, k, num_steps, start_colouring):
         samples.append(current.copy())
     return samples
 
-g = Graph(5)
-for _ in range(random.randint(10, 20)):
-    v1, v2 = random.sample(range(5), 2)
+# g = graph(3)
+# g.add_edge(0,1)
+# g.add_edge(1,2)
+# g.add_edge(2,0)
+
+# plt.plot(g)
+# plt.show()
+g = Graph(random.randint(5,10))
+for _ in range(random.randint(10, 30)):
+    v1, v2 = random.sample(range(g.size), 2)
+
     g.add_edge(v1, v2)
 
-k = 25
+k = g.size
 num_steps = 1500
 start_colouring = np.random.randint(0, k, g.size)
 print(start_colouring)
 samples = metropolis(g, k, num_steps, start_colouring)
 
 G = nx.from_numpy_array(g.adjMatrix)
+pos = nx.spring_layout(G, seed=42)
 
+fig, ax = plt.subplots(figsize=(6, 5))
+
+nodes = nx.draw_networkx_nodes(G, pos, node_color=samples[0], cmap=plt.cm.Spectral, ax=ax)
+edges = nx.draw_networkx_edges(G, pos, ax=ax)
+
+def update(frame):
+    ax.clear()
+    ax.set_title(f"Step {frame}")
+    nx.draw_networkx_edges(G, pos, ax=ax)
+    nx.draw_networkx_nodes(G, pos, node_color=samples[frame], cmap=plt.cm.Spectral, ax=ax)
+
+anim = animation.FuncAnimation(fig, update, frames=len(samples), interval=100)
 # pos = nx.spring_layout(G)
 
 # fig, ax = plt.subplots(figsize=(10, 8))
-# nx.draw(G, node_color=samples[1353], cmap=plt.cm.Spectral)
+# # nx.draw(G, node_color=samples[1353], cmap=plt.cm.Spectral)
 # print(samples[1499])
-nx.draw(G, node_color=samples[1499], cmap=plt.cm.Spectral)
+# nx.draw(G, node_color=samples[1499], cmap=plt.cm.Spectral)
 
 # # plt.plot(g)
 # def update(frame):
