@@ -1,5 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import matplotlib.animation as animation
+import networkx as nx
+import random
 
 class Graph():
     def __init__(self, size):
@@ -25,39 +28,34 @@ class Graph():
                 print(self.adjMatrix[i][j], end=' ')
             print()
 
-    def add_colour(self, v1, v2, colour):
-        return
+    def neighbors(self, v):
+        return [i for i in range(self.size) if self.adjMatrix[v][i] == 1]
 
-    def check_valid_colourings(self, v1, v2):
-        return
+def metropolis(graph, k, num_steps, start_colouring):
+    current = start_colouring.copy()
+    samples = [current.copy()]
 
+    for _ in range(num_steps):
+        v = np.random.randint(0, graph.size)
+        new_colour = np.random.randint(0, k)
 
-# General metropolis definition
-def metropolis(target_distribution, initial_state, proposal_std, num_samples):
-    samples = [initial_state]
-    current_state = initial_state
-
-    for _ in range(num_samples - 1):
-        proposed_state = current_state + np.random.normal(0, proposal_std)
-
-        acceptance_ratio = target_distribution(proposed_state) / target_distribution(current_state)
-        alpha = min(1, acceptance_ratio)
-
-        if np.random.rand() < alpha:
-            current_state = proposed_state
-        samples.append(current_state)
-
+        if new_colour != current[v]:
+            valid = True
+            for u in graph.neighbors(v):
+                if current[u] == new_colour:
+                    valid = False
+                    break
+            if valid:
+                current[v] = new_colour
+        samples.append(current.copy())
     return samples
 
+g = Graph(12)
+for _ in range(random.randint(10, 20)):
+    v1, v2 = random.sample(range(12), 2)
+    g.add_edge(v1, v2)
 
-if __name__ == '__main__':
-    graph = Graph
-    graph.__init__(graph, 5)
-    graph.add_edge(graph, 0, 0)
-    graph.add_edge(graph, 2, 3)
-    graph.add_edge(graph, 3, 2)
-    graph.add_edge(graph, 4, 0)
-
-    # graph.remove_edge(graph, 0, 0)
-    graph.show_graph(graph)
-    
+k = 7
+num_steps = 1500
+start_colouring = np.random.randint(0, k, g.size)
+samples = metropolis(g, k, num_steps, start_colouring)
