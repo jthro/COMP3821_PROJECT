@@ -2,6 +2,7 @@ import argparse
 import importlib
 import random
 import numpy as np
+import math
 
 from .graph import Graph
 from .manimAnimation import manimAnimation
@@ -12,7 +13,7 @@ def main():
     parser.add_argument("--algo", required=True)
     parser.add_argument("--visualiser", required=True)
     parser.add_argument("--size", required=True)
-    parser.add_argument("--steps", required=True)
+    # parser.add_argument("--steps", required=True)
 
     args = parser.parse_args()
 
@@ -24,8 +25,8 @@ def main():
         v1, v2 = random.sample(range(g.size), 2)
         g.add_edge(v1, v2)
 
-    k = g.size
-    num_steps = int(args.steps)
+    k = g.check_max_degree() + 1
+    num_steps = int(g.size * math.log(g.size))
     start_colouring = np.random.randint(0, k, g.size)
     samples = function(g, k, num_steps, start_colouring)
 
