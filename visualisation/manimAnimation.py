@@ -32,6 +32,10 @@ def manimAnimation(graph, samples, k):
             self.add(number)
             conflicts = Text(f"Conflicts: {graph.check_num_conflicts(samples[0])}", font_size=36).to_corner(UP + LEFT)
             self.add(conflicts)
+            max_degree = Text(f"Max Degree: {graph.check_max_degree()}", font_size=36).to_corner(DOWN + LEFT)
+            self.add(max_degree)
+            num_colours = Text(f"Num colours: {graph.check_num_colours(samples[0])}", font_size=36).to_corner(DOWN + RIGHT)
+            self.add(num_colours)
 
             self.play(*[Create(edge) for edge in edges], *[FadeIn(node) for node in nodes.values()])
             self.wait(0.5)
@@ -44,6 +48,10 @@ def manimAnimation(graph, samples, k):
                 self.remove(conflicts)
                 conflicts = Text(f"Conflicts: {graph.check_num_conflicts(samples[i])}", font_size=36).to_corner(UP + LEFT)
                 self.add(conflicts)
+
+                self.remove(num_colours)
+                num_colours = Text(f"Num colours: {graph.check_num_colours(samples[i])}", font_size=36).to_corner(DOWN + RIGHT)
+                self.add(num_colours)
 
                 animations = []
                 for j in range(graph.size):

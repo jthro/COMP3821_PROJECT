@@ -1,4 +1,3 @@
-# visualisation/__main__.py
 import argparse
 import importlib
 import random

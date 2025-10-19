@@ -34,3 +34,14 @@ class Graph():
                 if i < j and colouring[i] == colouring[j]:
                     conflicts += 1
         return conflicts
+
+    def check_max_degree(self):
+        max_degree = 0
+        for i in range(self.size):
+            degree = sum(self.adjMatrix[i])
+            if degree > max_degree:
+                max_degree = degree
+        return max_degree 
+
+    def check_num_colours(self, colouring):
+        return len(set(colouring))
