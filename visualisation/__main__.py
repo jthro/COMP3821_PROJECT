@@ -12,18 +12,21 @@ def main():
     parser = argparse.ArgumentParser(description="3821 Visualisations")
     parser.add_argument("--algo", required=True)
     parser.add_argument("--visualiser", required=True)
+    parser.add_argument("--size", required=True)
+    parser.add_argument("--steps", required=True)
+
     args = parser.parse_args()
 
     module = importlib.import_module(f"visualisation.algorithms.{args.algo}")
     function = getattr(module, args.algo)
 
-    g = Graph(random.randint(5, 10))
-    for _ in range(random.randint(10, 25)):
+    g = Graph(int(args.size))
+    for _ in range(random.randint(g.size + 10, g.size + 20)):
         v1, v2 = random.sample(range(g.size), 2)
         g.add_edge(v1, v2)
 
     k = g.size
-    num_steps = 15
+    num_steps = int(args.steps)
     start_colouring = np.random.randint(0, k, g.size)
     samples = function(g, k, num_steps, start_colouring)
 
