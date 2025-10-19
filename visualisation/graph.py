@@ -27,7 +27,10 @@ class Graph():
     def neighbors(self, v):
         return [i for i in range(self.size) if self.adjMatrix[v][i] == 1]
 
-    # def check_num_conflicts(self, colouring):
-    #     for i in range(self.size):
-    #         for j in range(self.size):
-    #             for u in graph.neighbors(i)
+    def check_num_conflicts(self, colouring):
+        conflicts = 0
+        for i in range(self.size):
+            for j in self.neighbors(i):
+                if i < j and colouring[i] == colouring[j]:
+                    conflicts += 1
+        return conflicts

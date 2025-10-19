@@ -21,7 +21,7 @@ def main():
     function = getattr(module, args.algo)
 
     g = Graph(int(args.size))
-    for _ in range(random.randint(g.size + 10, g.size + 20)):
+    for _ in range(random.randint(int(g.size * 1.5), int(g.size * 2))):
         v1, v2 = random.sample(range(g.size), 2)
         g.add_edge(v1, v2)
 
@@ -31,11 +31,11 @@ def main():
     samples = function(g, k, num_steps, start_colouring)
 
     if args.visualiser == "manim":
-        SceneClass = manimAnimation(g, samples)
+        SceneClass = manimAnimation(g, samples, k)
         scene = SceneClass()
         scene.render() 
     else:
-        matplotlibAnimation(g, samples)
+        matplotlibAnimation(g, samples, k)
 
 if __name__ == "__main__":
     main()

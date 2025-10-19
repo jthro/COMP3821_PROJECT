@@ -3,16 +3,16 @@ import numpy as np
 import networkx as nx
 
 # from graph import Graph
-def manimAnimation(graph, samples):
+def manimAnimation(graph, samples, k):
     class GraphColouringAnimation(Scene):
         def construct(self):
+            colour_map = color_gradient([RED, ORANGE, YELLOW, GREEN, BLUE, PURPLE], k)
+
             G = nx.from_numpy_array(graph.adjMatrix)
-            pos = nx.spring_layout(G, seed=42)
+            pos = nx.kamada_kawai_layout(G)
 
             scale = 3
             pos = {n: np.array([p[0], p[1], 0]) * scale for n, p in pos.items()}
-
-            colour_map = [BLUE, GREEN, RED, ORANGE, PURPLE, YELLOW, TEAL, PINK, GOLD, MAROON]
 
             nodes = {}
             for i in range(graph.size):
@@ -28,10 +28,23 @@ def manimAnimation(graph, samples):
                         edge = Line(pos[i], pos[j], stroke_width=2, color=GRAY)
                         edges.append(edge)
 
+            number = Text(f"Frame: 0", font_size=36).to_corner(UP + RIGHT)
+            self.add(number)
+            conflicts = Text(f"Conflicts: {graph.check_num_conflicts(samples[0])}", font_size=36).to_corner(UP + LEFT)
+            self.add(conflicts)
+
             self.play(*[Create(edge) for edge in edges], *[FadeIn(node) for node in nodes.values()])
             self.wait(0.5)
 
-            for i in range(1, len(samples), 2):
+            for i in range(len(samples) - 1):
+                self.remove(number)
+                number = Text(f"Frame: {i}", font_size=36).to_corner(UP + RIGHT)
+                self.add(number)
+
+                self.remove(conflicts)
+                conflicts = Text(f"Conflicts: {graph.check_num_conflicts(samples[i])}", font_size=36).to_corner(UP + LEFT)
+                self.add(conflicts)
+
                 animations = []
                 for j in range(graph.size):
                     new_colour = colour_map[samples[i][j] % len(colour_map)]
