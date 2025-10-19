@@ -21,7 +21,7 @@ def main():
     function = getattr(module, args.algo)
 
     g = Graph(int(args.size))
-    for _ in range(random.randint(int(g.size * 1.5), int(g.size * 2))):
+    for _ in range(random.randint(int(g.size * g.size), int(g.size * g.size))):
         v1, v2 = random.sample(range(g.size), 2)
         g.add_edge(v1, v2)
 
