@@ -34,7 +34,7 @@ def main():
         scene = SceneClass()
         scene.render() 
     else:
-        matplotlibAnimation(g, samples, k)
+        matplotlibAnimation(g, samples)
 
 if __name__ == "__main__":
     main()
