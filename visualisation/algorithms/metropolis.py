@@ -17,7 +17,5 @@ def metropolis(graph, k, num_steps, start_colouring):
                     break
             if valid:
                 current[v] = new_colour
-        # num_conflicts = check_num_conflicts(current)
-        # num_conflicts.append(num_conflicts)
         samples.append(current.copy())
     return samples
