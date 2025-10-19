@@ -1,0 +1,9 @@
+# How to run
+
+From the root directory of the repo run:\
+`python3 -m visualisation --algo [metropolis] --visualiser [manim/matplotlib]`\
+
+The manim video will show up in \
+`media/videos/1080p60/GraphColouringAnimation.mp4`\
+
+The matplotlib animation should show on the screen (idk how to save them)

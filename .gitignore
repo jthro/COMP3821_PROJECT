@@ -8,4 +8,7 @@
 *.xml
 *.gz
 *.toc
+*__pycache__
+*media
+venv
 !proposal_notes_jethro.pdf
