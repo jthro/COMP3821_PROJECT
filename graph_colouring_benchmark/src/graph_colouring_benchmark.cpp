@@ -1,17 +1,15 @@
+// Graph colouring algorithm benchmark
+// Test format:
+// - 5 different n to accurately see limiting time complexity
+// - Range Delta from 2 to n
+// - Range k from Delta + true to n
+
 #include <print>
+#include <vector>
 
 #include "graph.hpp"
 
 int main() {
-    AdjacencyMatrix<3> m{
-        std::array<bool, 3>{false, true, true},
-        std::array<bool, 3>{true, false, true},
-        std::array<bool, 3>{true, true, false},
-    };
-
-    ColouredGraph<3> g{m, {1, 2, 3}};
-
-    std::println("{},", g.num_edges());
-    std::println("{},", g.valid_colouring());
-    return 0;
+    ColouredGraph g{std::vector<std::vector<bool>>{{false,true,true},{true,false,true},{true,true,false}}, {1,2,2}};
+    std::println("{}", g.valid_colouring());
 }

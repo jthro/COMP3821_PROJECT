@@ -1,8 +1,8 @@
 [
 {
-  "directory": "/home/jthro/University/comp3821/project/graph_colouring_benchmark/project/build",
-  "command": "/usr/bin/c++  -I/home/jthro/University/comp3821/project/graph_colouring_benchmark/project/include -std=gnu++26 -o CMakeFiles/graph_colouring_benchmark.dir/src/graph_colouring_benchmark.cpp.o -c /home/jthro/University/comp3821/project/graph_colouring_benchmark/project/src/graph_colouring_benchmark.cpp",
-  "file": "/home/jthro/University/comp3821/project/graph_colouring_benchmark/project/src/graph_colouring_benchmark.cpp",
+  "directory": "/home/jthro/University/comp3821/project/proposal/graph_colouring_benchmark/debug",
+  "command": "/usr/bin/c++  -I/home/jthro/University/comp3821/project/proposal/graph_colouring_benchmark/include -g -g -std=gnu++26 -o CMakeFiles/graph_colouring_benchmark.dir/src/graph_colouring_benchmark.cpp.o -c /home/jthro/University/comp3821/project/proposal/graph_colouring_benchmark/src/graph_colouring_benchmark.cpp",
+  "file": "/home/jthro/University/comp3821/project/proposal/graph_colouring_benchmark/src/graph_colouring_benchmark.cpp",
   "output": "CMakeFiles/graph_colouring_benchmark.dir/src/graph_colouring_benchmark.cpp.o"
 }
 ]
