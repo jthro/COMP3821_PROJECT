@@ -1,9 +1,11 @@
 #pragma once
 
-#include <functional>
+#include <algorithm>
 #include <iterator>
 #include <numeric>
 #include <optional>
+#include <print>
+#include <random>
 #include <ranges>
 #include <tuple>
 #include <vector>
@@ -34,6 +36,28 @@ struct AdjacencyMatrix : std::vector<std::vector<bool>> {
         return std::accumulate(r.begin(), r.end(), 0);
     }
 };
+
+// https://arxiv.org/pdf/1509.06985
+// much simplified as \Delta \in \{k\}, k \in \mathbb{N}, not a distribution
+inline auto random_adjacency_matrix(size_t n_v, size_t degree) -> AdjacencyMatrix {
+    std::vector<std::vector<bool>> matrix(n_v, std::vector<bool>(n_v, false));
+
+    std::vector<size_t> stubs{};
+    for (size_t i : std::views::iota(0uz, n_v)) {
+        for (size_t j : std::views::iota(0uz, degree)) stubs.emplace_back(i);
+    }
+
+    std::vector<size_t> order{};
+    std::shuffle(stubs.begin(), stubs.end(), std::mt19937{std::random_device{}()});
+    for (auto pair : stubs | std::views::slide(2)) {
+        const size_t u = pair[0];
+        const size_t v = pair[1];
+        matrix[u][v] = true;
+        matrix[v][u] = true;
+    }
+
+    return AdjacencyMatrix{matrix};
+}
 
 class ColouredGraph {
    private:
@@ -76,5 +100,10 @@ class ColouredGraph {
                  });
         // (fold && r true)
         return std::accumulate(r.begin(), r.end(), true, [](bool a, bool b) { return a && b; });
+    }
+
+    void print() const {
+        std::println("{}", m_matrix);
+        std::println("Colours: {}", m_colouring);
     }
 };
