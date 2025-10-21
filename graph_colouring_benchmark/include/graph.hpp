@@ -1,7 +1,6 @@
 #pragma once
 
 #include <algorithm>
-#include <iterator>
 #include <numeric>
 #include <optional>
 #include <print>
@@ -11,8 +10,6 @@
 #include <vector>
 
 using colour = long long;
-
-struct ColourSuccess {};
 
 // Generate a sequence of integer pairs corresponding to upper triangular (minus the diagonal)
 // indices of a square matrix
@@ -39,6 +36,7 @@ struct AdjacencyMatrix : std::vector<std::vector<bool>> {
 
 // https://arxiv.org/pdf/1509.06985
 // much simplified as \Delta \in \{k\}, k \in \mathbb{N}, not a distribution
+// assign \Delta stubs to each vertex, sample pairs without replacement, remove self-loops
 inline auto random_adjacency_matrix(size_t n_v, size_t degree) -> AdjacencyMatrix {
     std::vector<std::vector<bool>> matrix(n_v, std::vector<bool>(n_v, false));
 
@@ -72,20 +70,31 @@ class ColouredGraph {
           m_colouring{std::move(colouring)},
           m_num_edges{m_matrix.compute_num_edges()} {}
 
+    template <typename T>
+    explicit ColouredGraph(T&& matrix, colour n_colours)
+        : m_matrix{std::forward<T>(matrix)}, m_num_edges{m_matrix.compute_num_edges()} {
+        std::random_device rd;
+	std::mt19937 gen{rd()};
+	std::uniform_int_distribution<> colour_distribution(0, n_colours-1);
+	for (auto i : std::ranges::iota_view{0uz, m_matrix.size()}) {
+	    m_colouring.emplace_back(colour_distribution(gen));
+        }
+    }
+
     auto get_colouring() const -> const std::vector<colour>& { return m_colouring; }
 
-    // Returns std::nullopt if the colouring failed
-    // Returns marker struct if the colouring succeeded
     // Note: this does not necessarily imply the whole colouring is valid
-    auto recolour(int vertex, colour colour) -> std::optional<ColourSuccess> {
+    auto recolour(int vertex, colour colour) -> bool {
+
         for (int neighbour : std::ranges::iota_view{0uz, m_matrix.size()}) {
+	    if (neighbour == vertex) continue;
             bool connected = m_matrix[vertex][neighbour];
             int neighbour_colour = m_colouring[neighbour];
-            if (connected && colour == neighbour_colour) return std::nullopt;
+            if (connected && colour == neighbour_colour) return false;
         }
 
         m_colouring[vertex] = colour;
-        return ColourSuccess{};
+        return true;
     }
 
     auto num_vertices() const -> int { return m_matrix.size(); }
@@ -107,3 +116,13 @@ class ColouredGraph {
         std::println("Colours: {}", m_colouring);
     }
 };
+
+// Technically we require two different uniform distributions for the generator
+inline auto NaiveMetropolis(ColouredGraph& graph, colour n_colours, size_t u, colour c) -> bool {
+    std::println("u: {}, c: {}", u, c);    
+
+    std::println("before: {}", graph.get_colouring());
+    auto result = graph.recolour(u, c);
+    std::println("after: {}", graph.get_colouring());
+    return result;
+}
