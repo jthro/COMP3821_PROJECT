@@ -125,7 +125,6 @@ class NaiveMetropolisRunner {
     std::mt19937 m_colour_gen{std::random_device{}()};
     std::uniform_int_distribution<> m_vertex_dist;
     std::uniform_int_distribution<> m_colour_dist;
-    JsonlWriter m_writer;
 
 
     auto NaiveMetropolis() -> bool {
@@ -135,12 +134,12 @@ class NaiveMetropolisRunner {
     }
 
    public:
-    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree, colour n_colours)
-    : m_graph(graph), m_writer{std::ofstream{"test.jsonl", std::ios::binary}} {
+    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree, colour n_colours, JsonlWriter& writer)
+    : m_graph(graph) {
         m_hist.emplace_back(m_graph.get_colouring());            
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
         for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
-	m_writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree);
+	writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree);
     }
 };
