@@ -8,6 +8,7 @@
 #include <ranges>
 #include <tuple>
 #include <vector>
+#include "jsonl.hpp"
 
 using colour = long long;
 
@@ -74,10 +75,10 @@ class ColouredGraph {
     explicit ColouredGraph(T&& matrix, colour n_colours)
         : m_matrix{std::forward<T>(matrix)}, m_num_edges{m_matrix.compute_num_edges()} {
         std::random_device rd;
-	std::mt19937 gen{rd()};
-	std::uniform_int_distribution<> colour_distribution(0, n_colours-1);
-	for (auto i : std::ranges::iota_view{0uz, m_matrix.size()}) {
-	    m_colouring.emplace_back(colour_distribution(gen));
+        std::mt19937 gen{rd()};
+        std::uniform_int_distribution<> colour_distribution(0, n_colours - 1);
+        for (auto i : std::ranges::iota_view{0uz, m_matrix.size()}) {
+            m_colouring.emplace_back(colour_distribution(gen));
         }
     }
 
@@ -85,9 +86,8 @@ class ColouredGraph {
 
     // Note: this does not necessarily imply the whole colouring is valid
     auto recolour(int vertex, colour colour) -> bool {
-
         for (int neighbour : std::ranges::iota_view{0uz, m_matrix.size()}) {
-	    if (neighbour == vertex) continue;
+            if (neighbour == vertex) continue;
             bool connected = m_matrix[vertex][neighbour];
             int neighbour_colour = m_colouring[neighbour];
             if (connected && colour == neighbour_colour) return false;
@@ -117,12 +117,30 @@ class ColouredGraph {
     }
 };
 
-// Technically we require two different uniform distributions for the generator
-inline auto NaiveMetropolis(ColouredGraph& graph, colour n_colours, size_t u, colour c) -> bool {
-    std::println("u: {}, c: {}", u, c);    
+class NaiveMetropolisRunner {
+   private:
+    ColouredGraph& m_graph;
+    std::vector<std::vector<colour>> m_hist;
+    std::mt19937 m_vertex_gen{std::random_device{}()};
+    std::mt19937 m_colour_gen{std::random_device{}()};
+    std::uniform_int_distribution<> m_vertex_dist;
+    std::uniform_int_distribution<> m_colour_dist;
+    JsonlWriter m_writer;
 
-    std::println("before: {}", graph.get_colouring());
-    auto result = graph.recolour(u, c);
-    std::println("after: {}", graph.get_colouring());
-    return result;
-}
+
+    auto NaiveMetropolis() -> bool {
+        auto result = m_graph.recolour(m_vertex_dist(m_vertex_gen), m_colour_dist(m_colour_gen));
+	m_hist.emplace_back(m_graph.get_colouring());
+        return result;
+    }
+
+   public:
+    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree, colour n_colours)
+    : m_graph(graph), m_writer{std::ofstream{"test.jsonl", std::ios::binary}} {
+        m_hist.emplace_back(m_graph.get_colouring());            
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
+        for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
+	m_writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree);
+    }
+};
