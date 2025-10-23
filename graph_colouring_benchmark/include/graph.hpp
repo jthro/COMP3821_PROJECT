@@ -81,6 +81,9 @@ class ColouredGraph {
             m_colouring.emplace_back(colour_distribution(gen));
         }
     }
+    ~ColouredGraph() {
+	std::println("Destroying graph of size {}", num_vertices());
+    }
 
     auto get_colouring() const -> const std::vector<colour>& { return m_colouring; }
 
@@ -140,6 +143,6 @@ class NaiveMetropolisRunner {
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
         for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
-	writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree);
+	writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k", n_colours);
     }
 };
