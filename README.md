@@ -4,6 +4,8 @@ Each stage we will simply make a new main branch.
 
 ## Proposal To Dos
 [Proposal To Dos](proposalToDos.md)
+[Progess Report To Dos](progressToDos.md)
+
 
 # Questions For Future 
 Is there a better heuristic for good and bad colourings when looking at path colourings (potential questions)?
