@@ -1,15 +1,15 @@
 # Based on Proposal Rubric
-## Cover Page
+## [ ] Cover Page
 - [ ] Topic Title
-- [ ] Names
-- [ ] zIds of everyone
-- [ ] Mentor names
+- [x] Names
+- [x] zIds of everyone
+- [x] Mentor names
 
-## Introduction
-- [ ] Reminder of topic
-- [ ] Nature of teh project included (Theoretical)
+## [ ] Introduction
+- [x] Reminder of topic
+- [x] Nature of teh project included (Theoretical)
 
-## Progress 
+## [ ] Progress 
 - [ ] Detailed Explanation of everything completed
 - [ ] Detailed explanation of everything started on
     - [ ] Partially (Fully) Implemented Algos
@@ -20,18 +20,18 @@
 - [ ] Issues or Hurdles We Had
     - [ ] How we dealt or intend to deal with them
 
-## Assessment of Plan for Progress
+## [ ] Assessment of Plan for Progress
 - [ ] Assessment of Plan
 - [ ] Revised Plan (Brief Anyways) (Literally the Same But needs to be more focused)
     - [ ] Aim to produce by the end of the project
     - [ ] Work needed to be completed to get to that point
     - [ ] More focused than what we had proposal
 
-## Bibliography 
+## [ ] Bibliography 
 - [ ] Complete Reference List
 - [ ] Complete In Text References
 
-## Based On Rubric Marking
+## [ ] Based On Rubric Marking
 - [ ] Progress 10 Marks
     - [ ] Either Shows we Have achieved what we set out to or a plan for equivalent work has been set and made progress with.
     - [ ] Detailed Discussion on Work Completed
@@ -76,3 +76,6 @@
 
 # Based on Paragraph Readthrough
 - [ ] To do after document creation and paragraphs written etc.
+
+## [ ] Introduction 
+- [ ] P1
