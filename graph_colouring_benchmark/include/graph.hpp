@@ -1,8 +1,10 @@
+
 #pragma once
 
 #include <algorithm>
+#include <cstddef>
+#include <cstdint>
 #include <numeric>
-#include <optional>
 #include <print>
 #include <random>
 #include <ranges>
@@ -82,7 +84,6 @@ class ColouredGraph {
             m_colouring.emplace_back(colour_distribution(gen));
         }
     }
-    ~ColouredGraph() { std::println("Destroying graph of size {}", num_vertices()); }
 
     auto get_colouring() const -> const std::vector<colour>& { return m_colouring; }
 
@@ -148,3 +149,58 @@ class NaiveMetropolisRunner {
                      graph.num_vertices(), "d", degree, "k", n_colours);
     }
 };
+
+class MiddletonBulsecoRunner {
+   private:
+    ColouredGraph& m_graph;
+    std::vector<std::vector<colour>> m_hist;
+    // keep track of how many of each colour
+    std::vector<uint_fast32_t> m_colour_frequency{};
+    std::mt19937 m_vertex_gen{std::random_device{}()};
+    std::mt19937 m_colour_gen{std::random_device{}()};
+    std::uniform_int_distribution<> m_vertex_dist;
+
+    auto select_colour() -> colour {
+        auto weights = m_colour_frequency | std::views::transform([this](uint_fast32_t k) {
+                           return m_graph.num_vertices() - k;
+                       });
+        
+        std::discrete_distribution<> colour_dist{weights.begin(),
+                                                 weights.end()};
+        return static_cast<colour>(colour_dist(m_colour_gen));
+    }
+
+    auto MiddletonBulseco() -> bool {
+        auto selected_colour = select_colour();
+        auto selected_vertex = m_vertex_dist(m_vertex_gen);
+
+        auto old_colour = m_graph.get_colouring()[selected_vertex];
+        auto result = m_graph.recolour(selected_vertex, selected_colour);
+        if (result) {
+            m_colour_frequency[old_colour]--;
+            m_colour_frequency[selected_colour]++;
+        }
+
+        m_hist.emplace_back(m_graph.get_colouring());
+        return result;
+    }
+
+   public:
+    explicit MiddletonBulsecoRunner(ColouredGraph& graph, size_t reps, size_t degree,
+                                    colour n_colours, JsonlWriter& writer)
+        : m_graph(graph) {
+        // usual setup
+        m_hist.emplace_back(m_graph.get_colouring());
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        // initialise colour frequency from first colouring
+        for (colour c : graph.get_colouring()) {
+            m_colour_frequency[c]++;
+        }
+
+        for (size_t i : std::ranges::iota_view{0uz, reps}) MiddletonBulseco();
+        writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
+                     n_colours);
+    }
+};
+
+
