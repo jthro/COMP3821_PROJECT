@@ -8,6 +8,7 @@
 #include <ranges>
 #include <tuple>
 #include <vector>
+
 #include "jsonl.hpp"
 
 using colour = long long;
@@ -81,11 +82,11 @@ class ColouredGraph {
             m_colouring.emplace_back(colour_distribution(gen));
         }
     }
-    ~ColouredGraph() {
-	std::println("Destroying graph of size {}", num_vertices());
-    }
+    ~ColouredGraph() { std::println("Destroying graph of size {}", num_vertices()); }
 
     auto get_colouring() const -> const std::vector<colour>& { return m_colouring; }
+
+    auto get_adjacency() const -> const std::vector<std::vector<bool>>& { return m_matrix; }
 
     // Note: this does not necessarily imply the whole colouring is valid
     auto recolour(int vertex, colour colour) -> bool {
@@ -129,20 +130,21 @@ class NaiveMetropolisRunner {
     std::uniform_int_distribution<> m_vertex_dist;
     std::uniform_int_distribution<> m_colour_dist;
 
-
     auto NaiveMetropolis() -> bool {
         auto result = m_graph.recolour(m_vertex_dist(m_vertex_gen), m_colour_dist(m_colour_gen));
-	m_hist.emplace_back(m_graph.get_colouring());
+        m_hist.emplace_back(m_graph.get_colouring());
         return result;
     }
 
    public:
-    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree, colour n_colours, JsonlWriter& writer)
-    : m_graph(graph) {
-        m_hist.emplace_back(m_graph.get_colouring());            
+    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree,
+                                   colour n_colours, JsonlWriter& writer)
+        : m_graph(graph) {
+        m_hist.emplace_back(m_graph.get_colouring());
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
         for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
-	writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k", n_colours);
+        writer.write("graph", m_graph.get_adjacency(), "colourings:", m_hist, "nv",
+                     graph.num_vertices(), "d", degree, "k", n_colours);
     }
 };
