@@ -17,14 +17,18 @@ int main() {
 
     JsonlWriter writer{std::ofstream{"output.jsonl", std::ios::binary}};
 
-    for (double k_coeff = 1; k_coeff < 4; k_coeff += 0.1) {
-        for (int n = 10; n <= 100; n += 5) {
-            for (int i = 0; i < n_trials; i++) {
-                int delta = n / 2;
-                colour n_colours = static_cast<colour>(k_coeff * delta);
-                ColouredGraph g{random_adjacency_matrix(n, delta), n_colours};
-                NaiveMetropolisRunner(g, n * n, delta, n_colours, writer);
-            }
-        }
-    }
+    // for (double k_coeff = 1; k_coeff < 4; k_coeff += 0.1) {
+    //     for (int n = 10; n <= 100; n += 5) {
+    //         for (int i = 0; i < n_trials; i++) {
+    //             int delta = n / 2;
+    //             colour n_colours = static_cast<colour>(k_coeff * delta);
+    //             ColouredGraph g{random_adjacency_matrix(n, delta), n_colours};
+    //             NaiveMetropolisRunner(g, n * n, delta, n_colours, writer);
+    //         }
+    //     }
+    // }
+    
+    int n = 20;
+    ColouredGraph g{random_adjacency_matrix(n, n/2), n};
+    NaiveMetropolisRunner(g, 100*n*n, n/2, n, writer);
 }
