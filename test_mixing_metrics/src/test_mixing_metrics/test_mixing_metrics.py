@@ -65,27 +65,34 @@ def main():
     args = parser.parse_args()
 
     with jsonlines.open(args.filename, mode='r') as reader:
-        trial = reader.read()
-        adjacency = trial['graph']
-        adjacency = fix_adjacency_matrix(adjacency)
-        
-        colourings = trial['colourings:']
-        histogram = gen_histogram(adjacency, colourings)
-        
-        x = np.arange(len(histogram))
+        for i in range(0,10):
+            trial = reader.read()
+            adjacency = trial['graph']
+            adjacency = fix_adjacency_matrix(adjacency)
+            
+            colourings = trial['colourings:']
+            histogram = gen_histogram(adjacency, colourings)
+            valid = [10 if h[1] else 0 for h in histogram]
 
-        freq = [h[0] for h in histogram]
-        valid = [10 if h[1] else 0 for h in histogram]
-
-        for i,v in enumerate(valid):
-            if not v == 0:
-                print(i)
-                break
+            for i,v in enumerate(valid):
+                if not v == 0:
+                    print(i)
+                    break
         
-        fig, ax = plt.subplots()
-        ax.plot(x, freq)
-        ax.plot(x, valid, linestyle="--", color="orange")
-        plt.show()
+        # x = np.arange(len(histogram))
+
+        # freq = [h[0] for h in histogram]
+        # valid = [10 if h[1] else 0 for h in histogram]
+
+        # for i,v in enumerate(valid):
+        #     if not v == 0:
+        #         print(i)
+        #         break
+        
+        # fig, ax = plt.subplots()
+        # ax.plot(x, freq)
+        # ax.plot(x, valid, linestyle="--", color="orange")
+        # plt.show()
 
             
             
