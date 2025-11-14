@@ -10,5 +10,8 @@
 *.toc
 *__pycache__
 *media
+*.jsonl
+**/build
+**/.cache
 venv
 !proposal_notes_jethro.pdf
