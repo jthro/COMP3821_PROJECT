@@ -32,18 +32,16 @@ def main():
     args = parser.parse_args()
 
     with jsonlines.open(args.filename, mode='r') as reader:
-        for i in range(0,40):
-            reader.read()
-            
         colourings = reader.read()['colourings:']
         histogram = gen_histogram(colourings)
+        histogram = np.array(histogram)
 
-        x = np.arange(len(histogram))
-        plt.style.use('_mpl-gallery')
+        histogram_grouped = histogram.reshape(-1, 18).sum(axis=1)
+        x_grouped = np.arange(len(histogram_grouped))
         fig, ax = plt.subplots()
-        ax.bar(x, histogram, width=1, edgecolor="white", linewidth=0.7)
+        ax.bar(x_grouped, histogram_grouped, width=1, edgecolor="white", linewidth = 0.7)
         plt.show()
-        
+
             
             
     
