@@ -38,7 +38,11 @@ def main():
         k = g.size
         num_steps = int(args.steps)
         start_colouring = np.random.randint(0, k, g.size)
-        samples = function(g, k, num_steps, start_colouring)
+        if args.algo == "pathCoupling":
+            start_colouring2 = np.random.randint(0, k, g.size)
+            samples1, samples2 = function(g, k, num_steps, start_colouring, start_colouring2)
+        else:
+            samples = function(g, k, num_steps, start_colouring)
 
     if args.visualiser == "manim":
         SceneClass = manimAnimation(g, samples, k)
