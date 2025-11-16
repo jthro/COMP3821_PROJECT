@@ -18,14 +18,14 @@ def main():
     args = parser.parse_args()
 
     if args.algo == "colouring":
-        with open("visualisation/colour1.jsonl", "r") as f:
+        with open("visualisation/output8.jsonl", "r") as f:
             data = json.loads(f.read())
 
         samples = data["colourings:"]
         nv = data["nv"]
         k = data["k"]
 
-        g = Graph(nv)
+        g = Graph.from_adj_matrix(data["graph"])
     else:
         module = importlib.import_module(f"visualisation.algorithms.{args.algo}")
         function = getattr(module, args.algo)
