@@ -145,8 +145,9 @@ class NaiveMetropolisRunner {
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
         for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
-        writer.write("graph", m_graph.get_adjacency(), "colourings:", m_hist, "nv",
-                     graph.num_vertices(), "d", degree, "k", n_colours);
+        writer.write("chain", "naive-metropolis", "graph", m_graph.get_adjacency(),
+                     "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
+                     n_colours);
     }
 };
 
@@ -164,9 +165,8 @@ class MiddletonBulsecoRunner {
         auto weights = m_colour_frequency | std::views::transform([this](uint_fast32_t k) {
                            return m_graph.num_vertices() - k;
                        });
-        
-        std::discrete_distribution<> colour_dist{weights.begin(),
-                                                 weights.end()};
+
+        std::discrete_distribution<> colour_dist{weights.begin(), weights.end()};
         return static_cast<colour>(colour_dist(m_colour_gen));
     }
 
@@ -188,7 +188,7 @@ class MiddletonBulsecoRunner {
    public:
     explicit MiddletonBulsecoRunner(ColouredGraph& graph, size_t reps, size_t degree,
                                     colour n_colours, JsonlWriter& writer)
-        : m_graph(graph) {
+        : m_graph(graph), m_colour_frequency(n_colours) {
         // usual setup
         m_hist.emplace_back(m_graph.get_colouring());
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
@@ -198,9 +198,8 @@ class MiddletonBulsecoRunner {
         }
 
         for (size_t i : std::ranges::iota_view{0uz, reps}) MiddletonBulseco();
-        writer.write("colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
+        writer.write("chain", "middleton-bulseco", "graph", m_graph.get_adjacency(),
+                     "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
                      n_colours);
     }
 };
-
-
