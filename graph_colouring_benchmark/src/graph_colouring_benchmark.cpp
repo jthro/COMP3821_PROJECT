@@ -18,7 +18,7 @@ int main() {
 
     // for (double k_coeff = 1; k_coeff < 4; k_coeff += 0.1) {
     //     for (int n = 10; n <= 100; n += 5) {
-    //         for (int i = 0; i < n_trials; i++) {
+    //         for (int i = 0; i < s; i++) {
     //             int delta = n / 2;
     //             colour n_colours = static_cast<colour>(k_coeff * delta);
     //             ColouredGraph g{random_adjacency_matrix(n, delta), n_colours};
@@ -32,18 +32,30 @@ int main() {
             for (int rep = 0; rep < 10; rep++) {
                 ColouredGraph g{random_adjacency_matrix(num_vertices, 10), k};
 
-		        std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
+		std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
                 NaiveMetropolisRunner(g, std::pow(num_vertices, 2), 10, k, writer);
-
-		        // std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);                
-                // MiddletonBulsecoRunner(g, std::pow(num_vertices, 2), 10, k, writer);
-
-                // std::println("Flip Dynamics | nV = {}, k = {}", num_vertices, k);
-                // FlipDynamicsRunner(g, std::pow(num_vertices, 2), 10, k, writer);
-                
-                // std::println("Sussy Baka 7 | nV = {}, k = {}", num_vertices, k);
-                // SussyBaka7(g, std::pow(num_vertices, 2), 10, k, writer);  
+		std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);                
+                MiddletonBulsecoRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+		std::println("Flip Dynamics | nV = {}, k = {}", num_vertices, k);
+		FlipDynamicsRunner(g, std::pow(num_vertices, 2), 10, k, writer);
             }
         }
     }
+    
+    // for (int num_vertices = 20; num_vertices <= 30; num_vertices += 2) {
+    //     for (int k = 10; k <= 30; k += 10) {
+    //         for (int rep = 0; rep < 1000; rep++) {
+    //             AdjacencyMatrix m{random_adjacency_matrix(num_vertices, 10)};
+    //             std::vector<colour> initial_colour{
+    //                 ColouredGraph::generate_colouring(num_vertices, k)};
+    //             ColouredGraph metropolis{m, initial_colour};
+    //             ColouredGraph middleton_bulseco{m, initial_colour};
+
+    //             std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
+    //             NaiveMetropolisRunner(metropolis, std::pow(num_vertices, 2), 10, k, writer);
+    //             std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);
+    //             MiddletonBulsecoRunner(middleton_bulseco, std::pow(num_vertices, 2), 10, k, writer);
+    //         }
+    //     }
+    // }
 }

@@ -2,6 +2,7 @@ import jsonlines
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+<<<<<<< HEAD
 import arviz as az
 import threading 
 
@@ -31,21 +32,31 @@ def gelman_rubin(colourings):
 #     gelman_rubin = gelman_rubin_numerator/within_chain_variance
 
 #     return gelman_rubin
+=======
+import threading
+from queue import Queue
+
+>>>>>>> a297e03 (Current status)
 
 def hash_colouring(colouring):
     return hash(tuple(colouring))
+
 
 def gen_histogram(graph, colourings):
     # index with hash, contains tuple of order, frequency
     ordered_hist = {}
     n_distinct_colourings = 0
-    
+
     for colouring in colourings:
         key = hash_colouring(colouring)
         if key in ordered_hist:
             ordered_hist[key][1] += 1
         else:
-            ordered_hist[key] = [n_distinct_colourings, 1, verify_colouring(graph, colouring)]
+            ordered_hist[key] = [
+                n_distinct_colourings,
+                1,
+                verify_colouring(graph, colouring),
+            ]
             n_distinct_colourings += 1
 
     # turn it into an array
@@ -55,35 +66,37 @@ def gen_histogram(graph, colourings):
 
     return result
 
+
 # old jethro was too clever by half (quite literally)
 # - "the matrix is diagonally symmetrical i just need to fill in the top diagonal"
 # idiot
 def fix_adjacency_matrix(adjacency):
-    for i,row in enumerate(adjacency):
-        for j,cell in enumerate(row):
+    for i, row in enumerate(adjacency):
+        for j, cell in enumerate(row):
             adjacency[i][j] |= cell
 
     return adjacency
+
 
 # 2521 reference
 # returns True if valid colouring
 def verify_colouring(graph, colouring):
     stack = [0]
     visited = [False] * len(graph)
-    while not len(stack) == 0:        
+    while not len(stack) == 0:
         curr = stack.pop()
         if visited[curr]:
             continue
-        
+
         visited[curr] = True
 
         for neighbour, edge in enumerate(graph[curr]):
             if not edge or neighbour == curr:
                 continue
-            
+
             if colouring[curr] == colouring[neighbour]:
                 return False
-            
+
             stack.append(neighbour)
 
         return True
@@ -129,61 +142,131 @@ def calc_mixing(chains):
     print(min_index)
     print(rhat_list)
 
+def mixing_time(trial):
+    adjacency = fix_adjacency_matrix(trial["graph"])
 
+    for i, colouring in enumerate(trial["colourings:"]):
+        if verify_colouring(adjacency, colouring):
+            return i
+    return i
+
+
+# process a singular jsonl object
+def process_obj(obj):
+    chain = obj["chain"]
+    k = obj["k"]
+    nv = obj["nv"]
+
+    return {"chain": chain, "k": k, "nv": nv, "time": mixing_time(obj)}
+
+
+# process a list of jsonl objects
+# intended as a task for one worker thread
+def triage_task(task_queue, result_queue):
+    while True:
+        obj = task_queue.get()
+        if obj is None:
+            break
+        result_queue.put(process_obj(obj))
+        task_queue.task_done()
+
+
+# combine a queue of mixing time results into a table
+# intended to recombine the worker thread results
+def triage_combine(triage_result_queue):
+    return_table = {}
+    while not triage_result_queue.empty():
+        result = triage_result_queue.get()
+        chain = result['chain']
+        k = result['k']
+        nv = result['nv']
+        time = result['time']
+        print(chain)
+        
+        return_table.setdefault(chain, {}).setdefault(k, {}).setdefault(nv, []).append(time)
+    print(return_table)
+    return return_table
+
+
+# MAIN
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
     args = parser.parse_args()
 
+    task_queue = Queue(maxsize=1028)
     
+    threads = []
+    result_queue = Queue()
+    for _ in range(16):
+        t = threading.Thread(target=triage_task, args=(task_queue, result_queue))
+        t.start()
+        threads.append(t)
 
-    with jsonlines.open(args.filename, mode='r') as reader:
-        threads = []
+    with jsonlines.open(args.filename, mode="r") as reader:
+        for i, obj in enumerate(reader):
+            task_queue.put(obj)
 
-        for i in range(0,99):
-            chains = []
-            for j in range(0, 10):
-                trial = reader.read()
-                adjacency = trial['graph']
-                adjacency = fix_adjacency_matrix(adjacency)
-                
-                colourings = trial['colourings:']
-                histogram = gen_histogram(adjacency, colourings)
+    for t in range(16):
+        task_queue.put(None)
+    for t in threads:
+        t.join()
 
-                chains.append(colourings)
-            t = threading.Thread(target=calc_mixing, args=(chains,))
-            threads.append(t)
+    result_table = triage_combine(result_queue)
 
-        for t in threads:
-            t.start()
+    print(result_table)
+    # mean, standard deviation for each one
+    stats = {}
+    for chain, ks in result_table.items():
+        stats[chain] = {}
+        for k, nv_dict in ks.items():
+            nvs = sorted(nv_dict.keys())
+            means = [np.mean(nv_dict[nv]) for nv in nvs]
+            iqrs = [
+                np.percentile(nv_dict[nv], 75) - np.percentile(nv_dict[nv], 25)
+                for nv in nvs
+            ]
+            stats[chain][k] = (nvs, means, iqrs)
 
-        for t in threads:
-            t.join()
-            
-            
-            # for i,v in enumerate(valid):
-            #     if not v == 0:
-            #         print(i)
-            #         break
-        
-        # x = np.arange(len(histogram))
+    colors = {"middleton-bulseco": "blue", "naive-metropolis": "orange"}
 
-        # freq = [h[0] for h in histogram]
-        # valid = [10 if h[1] else 0 for h in histogram]
+    # Get all unique k values across both chains
+    all_ks = sorted(
+        set(
+            list(stats["middleton-bulseco"].keys())
+            + list(stats["naive-metropolis"].keys())
+        ),
+        key=int,
+    )
 
-        # for i,v in enumerate(valid):
-        #     if not v == 0:
-        #         print(i)
-        #         break
-        
-        # fig, ax = plt.subplots()
-        # ax.plot(x, freq)
-        # ax.plot(x, valid, linestyle="--", color="orange")
-        # plt.show()
+    # Create subplots: one per k
+    fig, axes = plt.subplots(len(all_ks), 1, figsize=(8, 5 * len(all_ks)), sharex=True)
 
-# print('hello')    
+    if len(all_ks) == 1:
+        axes = [axes]  # Ensure axes is always iterable
 
-if __name__ == "__main__":
-    main()
+    for ax, k in zip(axes, all_ks):
+        for chain in ["middleton-bulseco", "naive-metropolis"]:
+            if k in stats[chain]:
+                nvs, means, iqrs = stats[chain][k]
+                ax.errorbar(
+                    nvs,
+                    means,
+                    yerr=iqrs,
+                    label=(
+                        "Naive Metropolis"
+                        if (chain == "naive-metropolis")
+                        else "Middleton-Bulseco"
+                    ),
+                    color=colors[chain],
+                    marker="o",
+                    capsize=4,
+                )
+        ax.set_title(f"Mean Mixing Time & IQR for k={k}")
+        ax.set_ylabel("Mixing Time")
+        ax.legend()
 
-        
+    axes[-1].set_xlabel("nv")
+    plt.tight_layout()
+    plt.show()
+

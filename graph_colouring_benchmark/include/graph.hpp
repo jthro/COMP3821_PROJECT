@@ -76,16 +76,30 @@ class ColouredGraph {
           m_colouring{std::move(colouring)},
           m_num_edges{m_matrix.compute_num_edges()} {}
 
-    template <typename T>
-    explicit ColouredGraph(T&& matrix, colour n_colours)
-        : m_matrix{std::forward<T>(matrix)}, m_num_edges{m_matrix.compute_num_edges()} {
+    static auto generate_colouring(size_t n, colour k) -> std::vector<colour> {
         std::random_device rd;
         std::mt19937 gen{rd()};
-        std::uniform_int_distribution<> colour_distribution(0, n_colours - 1);
-        for (auto i : std::ranges::iota_view{0uz, m_matrix.size()}) {
-            m_colouring.emplace_back(colour_distribution(gen));
+        std::uniform_int_distribution<> colour_distribution(0, k - 1);
+
+        std::vector<colour> colouring{};
+        for (auto i : std::ranges::iota_view{0uz, n}) {
+            colouring.emplace_back(colour_distribution(gen));
         }
+
+        return colouring;
     }
+
+    template <typename T>
+    explicit ColouredGraph(T&& matrix, colour n_colours)
+        : m_matrix{std::forward<T>(matrix)},
+          m_num_edges{m_matrix.compute_num_edges()},
+          m_colouring{generate_colouring(matrix.size(), n_colours)} {}
+
+    template <typename T, typename U>
+    explicit ColouredGraph(T&& matrix, U&& colouring)
+        : m_matrix{std::forward<T>(matrix)},
+          m_colouring{std::forward<U>(colouring)},
+          m_num_edges{m_matrix.compute_num_edges()} {}
 
     auto get_colouring() const -> const std::vector<colour>& { return m_colouring; }
 
