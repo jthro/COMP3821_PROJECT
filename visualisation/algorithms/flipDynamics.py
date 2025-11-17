@@ -17,7 +17,7 @@ def flipDynamics(graph, k, num_steps, start_colouring):
             c = np.random.randint(0, k)
 
         cluster = set([v])
-        queue = deque([v])
+        queue = queue([v])
 
         while queue:
             u = queue.pop()
