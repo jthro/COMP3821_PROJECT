@@ -45,3 +45,10 @@ class Graph():
 
     def check_num_colours(self, colouring):
         return len(set(colouring))
+
+    @classmethod
+    def from_adj_matrix(cls, matrix):
+        size = len(matrix)
+        g = cls(size)
+        g.adjMatrix = np.array(matrix)
+        return g

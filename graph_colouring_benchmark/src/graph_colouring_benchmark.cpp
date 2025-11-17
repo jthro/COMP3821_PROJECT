@@ -6,14 +6,25 @@
 // please note -- everything in this program just ignores the diagonal and everything below as we
 // assume an undirected simple graph
 
+<<<<<<< HEAD
 #include <cmath>
 #include <fstream>
 #include <print>
+=======
+#include <fstream>
+>>>>>>> proposal
 
 #include "graph.hpp"
 #include "jsonl.hpp"
 
+<<<<<<< HEAD
 int main() {
+=======
+constexpr int n_trials = 5;
+
+int main() {
+
+>>>>>>> proposal
     JsonlWriter writer{std::ofstream{"output.jsonl", std::ios::binary}};
 
     // for (double k_coeff = 1; k_coeff < 4; k_coeff += 0.1) {
@@ -26,6 +37,7 @@ int main() {
     //         }
     //     }
     // }
+<<<<<<< HEAD
 
     for (int num_vertices = 10; num_vertices <= 100; num_vertices += 5) {
         for (int k = 10; k <= 14; k += 1) {
@@ -41,4 +53,10 @@ int main() {
             }
         }
     }
+=======
+    
+    int n = 20;
+    ColouredGraph g{random_adjacency_matrix(n, n/2), n};
+    NaiveMetropolisRunner(g, 100*n*n, n/2, n, writer);
+>>>>>>> proposal
 }
