@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "3821-visualisations"
+version = "2.2.1"
+description = "Graph visualisations for COMP3821"
+readme = "README.md"
+packages = [
+    { include = "visualisation" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.13.7"
+numpy = "^2.0.0"
+matplotlib = "^3.8.0"
+manim = "^0.19.0"
+networkx = "^3.3"
+
+[tool.poetry.scripts]
+visualise = "visualisation.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

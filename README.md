@@ -4,6 +4,8 @@ Each stage we will simply make a new main branch.
 
 ## Proposal To Dos
 [Proposal To Dos](proposalToDos.md)
+[Progess Report To Dos](progressToDos.md)
+
 
 # Questions For Future 
 Is there a better heuristic for good and bad colourings when looking at path colourings (potential questions)?
@@ -16,6 +18,8 @@ Is there a better heuristic for good and bad colourings when looking at path col
 [Week 3](meeting_notes/week_3.md)<br>
 [Week 4](meeting_notes/week_4.md)
 
+# Useful note on coupling
+<img width="1031" height="838" alt="image" src="https://github.com/user-attachments/assets/e4b13a13-651d-4da5-ace5-3241873fe1d5" />
 
 # Links
 [Rapid mixing of Glauber dynamics for colorings below Vigoda’s
