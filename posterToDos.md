@@ -77,7 +77,7 @@
 
 
 # Based on Paragraph Readthrough
-- [ ] To do after document creation and paragraphs written etc.
+- [ ] To do after document creation and paragraphs written etc. 
 
 ## Summary
 
