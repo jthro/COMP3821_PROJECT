@@ -177,14 +177,14 @@ def triage_combine(triage_result_queue):
     return_table = {}
     while not triage_result_queue.empty():
         result = triage_result_queue.get()
-        chain = result['chain']
-        k = result['k']
-        nv = result['nv']
-        time = result['time']
-        print(chain)
-        
-        return_table.setdefault(chain, {}).setdefault(k, {}).setdefault(nv, []).append(time)
-    print(return_table)
+        chain = result["chain"]
+        k = result["k"]
+        nv = result["nv"]
+        time = result["time"]
+
+        return_table.setdefault(chain, {}).setdefault(k, {}).setdefault(nv, []).append(
+            time
+        )
     return return_table
 
 
@@ -195,7 +195,7 @@ def main():
     args = parser.parse_args()
 
     task_queue = Queue(maxsize=1028)
-    
+
     threads = []
     result_queue = Queue()
     for _ in range(16):
@@ -214,7 +214,6 @@ def main():
 
     result_table = triage_combine(result_queue)
 
-    print(result_table)
     # mean, standard deviation for each one
     stats = {}
     for chain, ks in result_table.items():
@@ -222,11 +221,8 @@ def main():
         for k, nv_dict in ks.items():
             nvs = sorted(nv_dict.keys())
             means = [np.mean(nv_dict[nv]) for nv in nvs]
-            iqrs = [
-                np.percentile(nv_dict[nv], 75) - np.percentile(nv_dict[nv], 25)
-                for nv in nvs
-            ]
-            stats[chain][k] = (nvs, means, iqrs)
+            stds = [np.std(nv_dict[nv]) / np.sqrt(len(nv_dict[nv])) for nv in nvs]
+            stats[chain][k] = (nvs, means, stds)
 
     colors = {"middleton-bulseco": "blue", "naive-metropolis": "orange"}
 
@@ -248,21 +244,21 @@ def main():
     for ax, k in zip(axes, all_ks):
         for chain in ["middleton-bulseco", "naive-metropolis"]:
             if k in stats[chain]:
-                nvs, means, iqrs = stats[chain][k]
+                nvs, means, stds = stats[chain][k]
                 ax.errorbar(
                     nvs,
                     means,
-                    yerr=iqrs,
+                    yerr=stds,
                     label=(
                         "Naive Metropolis"
                         if (chain == "naive-metropolis")
-                        else "Middleton-Bulseco"
+                        else "Our Chain"
                     ),
                     color=colors[chain],
                     marker="o",
                     capsize=4,
                 )
-        ax.set_title(f"Mean Mixing Time & IQR for k={k}")
+        ax.set_title(f"Mean Mixing Time for k={k}")
         ax.set_ylabel("Mixing Time")
         ax.legend()
 
