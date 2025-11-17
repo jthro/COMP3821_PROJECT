@@ -31,10 +31,13 @@ int main() {
         for (int k = 10; k <= 14; k += 1) {
             for (int rep = 0; rep < 10; rep++) {
                 ColouredGraph g{random_adjacency_matrix(num_vertices, 10), k};
-		std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
-                NaiveMetropolisRunner(g, std::pow(num_vertices, 2), 10, k, writer);
-		std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);                
-                MiddletonBulsecoRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+		// std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
+        //         NaiveMetropolisRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+		// std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);                
+        //         MiddletonBulsecoRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+        std::println("Flip Dynamics | nV = {}, k = {}", num_vertices, k);
+                FlipDynamicsRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+        // std::println("Invalid | nV = {}, k = {}", num_vertices, k);
             }
         }
     }
