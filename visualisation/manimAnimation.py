@@ -34,8 +34,10 @@ def manimAnimation(graph, samples, k):
             self.add(conflicts)
             max_degree = Text(f"Max Degree: {graph.check_max_degree()}", font_size=36).to_corner(DOWN + LEFT)
             self.add(max_degree)
-            num_colours = Text(f"Num colours: {graph.check_num_colours(samples[0])}", font_size=36).to_corner(DOWN + RIGHT)
+            num_colours = Text(f"Current colours: {graph.check_num_colours(samples[0])} Min colours: null", font_size=36).to_corner(DOWN + RIGHT)
             self.add(num_colours)
+
+            least_colours = "null"
 
             self.play(*[Create(edge) for edge in edges], *[FadeIn(node) for node in nodes.values()])
             self.wait(0.5)
@@ -49,10 +51,17 @@ def manimAnimation(graph, samples, k):
                 conflicts = Text(f"Conflicts: {graph.check_num_conflicts(samples[i])}", font_size=36).to_corner(UP + LEFT)
                 self.add(conflicts)
 
+                if (graph.check_num_conflicts(samples[i]) == 0):
+                    if (least_colours == "null"):
+                        least_colours = graph.check_num_colours(samples[i])
+                    elif (graph.check_num_colours(samples[i]) < least_colours):
+                        least_colours = graph.check_num_colours(samples[i])
+
                 self.remove(num_colours)
-                num_colours = Text(f"Num colours: {graph.check_num_colours(samples[i])}", font_size=36).to_corner(DOWN + RIGHT)
+                num_colours = Text(f"Current colours: {graph.check_num_colours(samples[i])} Min colours: {least_colours}", font_size=36).to_corner(DOWN + RIGHT)
                 self.add(num_colours)
 
+                
                 animations = []
                 for j in range(graph.size):
                     new_colour = colour_map[samples[i][j] % len(colour_map)]
@@ -63,6 +72,8 @@ def manimAnimation(graph, samples, k):
                 else:
                     self.wait(0.1)
 
-            self.wait(1)
+            # least = Text(f"Min colours: {least_colours}", fon)
+            # self.add(least)
+            # self.wait(3)
 
     return GraphColouringAnimation
