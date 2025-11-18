@@ -32,11 +32,9 @@ def gelman_rubin(colourings):
 #     gelman_rubin = gelman_rubin_numerator/within_chain_variance
 
 #     return gelman_rubin
-=======
+
 import threading
 from queue import Queue
-
->>>>>>> a297e03 (Current status)
 
 def hash_colouring(colouring):
     return hash(tuple(colouring))
