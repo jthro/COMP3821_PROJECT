@@ -305,21 +305,35 @@ class FlipDynamicsRunner {
         }
 };
 
-// class GuaranteedInvalidChoicing {
+// class SussyBaka7Runner {
 //     private:
 //         ColouredGraph& m_graph;
-//         std::vector<std::vector<colour>> m_hist;
+//             std::vector<std::vector<colour>> m_hist;
 //         std::mt19937 m_vertex_gen{std::random_device{}()};
-//         std::mt19937 m_colour_gen{std::random_device{}()};
+//         // added a tie break 
+//         std::mt19937 m_tiebreak_gen{std::random_device[]()};
 //         std::uniform_int_distribution<> m_vertex_dist;
-//         std::uniform_int_distribution<> m_colour_dist;
+//         std::vector<std::vector<int>> invalid_nautral;
 
+//         void build_invalid_neutral() {
+//             int n = m_graph.num_vertices();
+//             auto& adj = m_graph.get_adjacency();
+//             auto colouring = m_graph.get_adjacency();
+
+//             invalid_neutral.assign(n, std::vector<int>(k, 0));
+//         }
 //         auto InvalidAlgo() -> bool {
+//             std::vector<std::vector<colour>>> colours;
 
+//             // IDK MAN
+
+//             for (int i = 0; i m_graph.num_vertices(); i++) {
+
+//             }
 //         }
 
 //     public:
-//         explicit GuaranteedInvalidChoicingRunner(
+//         explicit SussyBaka7Runner(
 //             ColouredGraph& graph, size_t reps, size_t degree,
 //             colour n_colours, JsonlWriter& writer)
 //             : m_graph(graph)
@@ -329,9 +343,9 @@ class FlipDynamicsRunner {
 //             m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
 //             m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
 
-//             for (size_t i : std::ranges::iota_view{0uz, reps}) Flip();
+//             for (size_t i : std::ranges::iota_view{0uz, reps}) InvalidAlgo();
 
-//             writer.write("chain", "guanranteed-invalid-choicing-runner", "graph", m_graph.get_adjacency(),
+//             writer.write("chain", "sussy-baka-7", "graph", m_graph.get_adjacency(),
 //                         "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
 //                         n_colours);
 //         }    

@@ -1,7 +1,36 @@
-import jsonlines
+import jsonlines 
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
+import arviz
+# import threading 
+
+# PROCEDURE:
+# treat each sample as a histogram of colour frequencies
+# compute the gelman-rubin R-statistic for every colour
+# take the maximum, if this is "close to 1" then the chain is actually mixed
+
+
+def gelman_rubin(colourings):
+    return arviz.rhat(colourings)
+
+# R = \frac{\frac{L-1}{L}W+\frac{1}{L}B}{W}
+# W = \frac{1}{J}\sum_{j=1}^J s_j^2
+# # B = \frac{L}{J-1}\sum_{j=1}^J(x_j-x)^2
+# def gelman_rubin_r_statistic(colourings):
+#     L = 
+#     chain_main = 1/L + sum()
+#     grand_mean = 
+#     between_chain_variance = 
+#     within_chain_variance = 
+
+#     # Gelman-Rubin calculations
+#     gelman_rubin_numerator_part_1 = ((L - 1)/L) * within_chain_variance
+#     gelman_rubin_numerator_part_2 = 1/L * between_chain_variance
+#     gelman_rubin_numerator = gelman_rubin_numerator_part_1 + gelman_rubin_numerator_part_2
+#     gelman_rubin = gelman_rubin_numerator/within_chain_variance
+
+#     return gelman_rubin
 
 def hash_colouring(colouring):
     return hash(tuple(colouring))
@@ -58,26 +87,63 @@ def verify_colouring(graph, colouring):
             stack.append(neighbour)
 
         return True
-    
+
 def main():
+    print('ehllo')
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
     args = parser.parse_args()
 
+    print(args)
+
     with jsonlines.open(args.filename, mode='r') as reader:
-        for i in range(0,10):
+        for i in range(0,2):
             trial = reader.read()
             adjacency = trial['graph']
             adjacency = fix_adjacency_matrix(adjacency)
             
             colourings = trial['colourings:']
             histogram = gen_histogram(adjacency, colourings)
+            
             valid = [10 if h[1] else 0 for h in histogram]
+            # print(valid)
 
-            for i,v in enumerate(valid):
-                if not v == 0:
-                    print(i)
+            # print(colourings)
+            current = []
+            rhat_values = []
+            counter = 0
+            for c in colourings:
+                current.append(c)
+                np_current = np.array(current)
+                # print(np_current)
+                arviz_type = arviz.convert_to_dataset(np_current)
+                value = arviz.rhat(np_current, method="rank")
+                rhat_values.append(value)
+                counter += 1
+
+                if counter == 1:
+                    continue
+                print(value)
+                if value < 1:
+                    print(counter)
                     break
+
+            # print(rhat_values)
+
+            # rhat_values = arviz.rhat(colourings, method="rank")
+
+            # print(arviz.rhat(colourings, method="rank"))
+            # print(colourings)
+            # for v in valid:
+            #     if (gelman_rubin(colourings) == 1):
+            #         print(v)
+            #         break
+
+
+            # for i,v in enumerate(valid):
+            #     if not v == 0:
+            #         print(i)
+            #         break
         
         # x = np.arange(len(histogram))
 
@@ -94,7 +160,9 @@ def main():
         # ax.plot(x, valid, linestyle="--", color="orange")
         # plt.show()
 
-            
-            
-    
-    
+# print('hello')    
+
+if __name__ == "__main__":
+    main()
+
+        
