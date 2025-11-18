@@ -76,16 +76,30 @@ class ColouredGraph {
           m_colouring{std::move(colouring)},
           m_num_edges{m_matrix.compute_num_edges()} {}
 
-    template <typename T>
-    explicit ColouredGraph(T&& matrix, colour n_colours)
-        : m_matrix{std::forward<T>(matrix)}, m_num_edges{m_matrix.compute_num_edges()} {
+    static auto generate_colouring(size_t n, colour k) -> std::vector<colour> {
         std::random_device rd;
         std::mt19937 gen{rd()};
-        std::uniform_int_distribution<> colour_distribution(0, n_colours - 1);
-        for (auto i : std::ranges::iota_view{0uz, m_matrix.size()}) {
-            m_colouring.emplace_back(colour_distribution(gen));
+        std::uniform_int_distribution<> colour_distribution(0, k - 1);
+
+        std::vector<colour> colouring{};
+        for (auto i : std::ranges::iota_view{0uz, n}) {
+            colouring.emplace_back(colour_distribution(gen));
         }
+
+        return colouring;
     }
+
+    template <typename T>
+    explicit ColouredGraph(T&& matrix, colour n_colours)
+        : m_matrix{std::forward<T>(matrix)},
+          m_num_edges{m_matrix.compute_num_edges()},
+          m_colouring{generate_colouring(matrix.size(), n_colours)} {}
+
+    template <typename T, typename U>
+    explicit ColouredGraph(T&& matrix, U&& colouring)
+        : m_matrix{std::forward<T>(matrix)},
+          m_colouring{std::forward<U>(colouring)},
+          m_num_edges{m_matrix.compute_num_edges()} {}
 
     auto get_colouring() const -> const std::vector<colour>& { return m_colouring; }
 
@@ -128,8 +142,8 @@ class NaiveMetropolisRunner {
    private:
     ColouredGraph& m_graph;
     std::vector<std::vector<colour>> m_hist;
-    std::mt19937 m_vertex_gen{std::random_device{}()};
-    std::mt19937 m_colour_gen{std::random_device{}()};
+    std::mt19937 m_vertex_gen{};
+    std::mt19937 m_colour_gen{};
     std::uniform_int_distribution<> m_vertex_dist;
     std::uniform_int_distribution<> m_colour_dist;
 
@@ -142,7 +156,10 @@ class NaiveMetropolisRunner {
    public:
     explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree,
                                    colour n_colours, JsonlWriter& writer)
-        : m_graph(graph) {
+        : m_graph(graph),
+          m_vertex_gen{std::random_device{}()},
+          m_colour_gen{std::random_device{}()} {
+        
         m_hist.emplace_back(m_graph.get_colouring());
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
@@ -151,6 +168,22 @@ class NaiveMetropolisRunner {
                      "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
                      n_colours);
     }
+
+    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree,
+                                   colour n_colours, std::mt19937& vertex_seed, std::mt19937& colour_seed, JsonlWriter& writer)
+        : m_graph(graph),
+          m_vertex_gen{vertex_seed},
+          m_colour_gen{colour_seed} {
+        
+        m_hist.emplace_back(m_graph.get_colouring());
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
+        for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
+        writer.write("chain", "naive-metropolis", "graph", m_graph.get_adjacency(),
+                     "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
+                     n_colours);
+    }
+    
 };
 
 class MiddletonBulsecoRunner {
@@ -159,8 +192,8 @@ class MiddletonBulsecoRunner {
     std::vector<std::vector<colour>> m_hist;
     // keep track of how many of each colour
     std::vector<uint_fast32_t> m_colour_frequency{};
-    std::mt19937 m_vertex_gen{std::random_device{}()};
-    std::mt19937 m_colour_gen{std::random_device{}()};
+    std::mt19937 m_vertex_gen{};
+    std::mt19937 m_colour_gen{};
     std::uniform_int_distribution<> m_vertex_dist;
 
     auto select_colour() -> colour {
@@ -190,7 +223,32 @@ class MiddletonBulsecoRunner {
    public:
     explicit MiddletonBulsecoRunner(ColouredGraph& graph, size_t reps, size_t degree,
                                     colour n_colours, JsonlWriter& writer)
-        : m_graph(graph), m_colour_frequency(n_colours) {
+        : m_graph(graph),
+          m_colour_frequency(n_colours),
+          m_vertex_gen{std::random_device{}()},
+          m_colour_gen{std::random_device{}()} {
+        // usual setup
+        m_hist.emplace_back(m_graph.get_colouring());
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        // initialise colour frequency from first colouring
+        for (colour c : graph.get_colouring()) {
+            m_colour_frequency[c]++;
+        }
+
+        for (size_t i : std::ranges::iota_view{0uz, reps}) MiddletonBulseco();
+        writer.write("chain", "middleton-bulseco", "graph", m_graph.get_adjacency(),
+                     "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
+                     n_colours);
+    }
+
+    // copies seed by value
+    explicit MiddletonBulsecoRunner(ColouredGraph& graph, size_t reps, size_t degree,
+                                    colour n_colours, std::mt19937& vertex_seed,
+                                    std::mt19937& colour_seed, JsonlWriter& writer)
+        : m_graph(graph),
+          m_colour_frequency(n_colours),
+          m_vertex_gen{vertex_seed},
+          m_colour_gen{colour_seed} {
         // usual setup
         m_hist.emplace_back(m_graph.get_colouring());
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
