@@ -2,7 +2,7 @@ import jsonlines
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
-import arviz
+import arviz as az
 # import threading 
 
 # PROCEDURE:
@@ -97,13 +97,19 @@ def main():
     print(args)
 
     with jsonlines.open(args.filename, mode='r') as reader:
-        for i in range(0,2):
-            trial = reader.read()
-            adjacency = trial['graph']
-            adjacency = fix_adjacency_matrix(adjacency)
-            
-            colourings = trial['colourings:']
-            histogram = gen_histogram(adjacency, colourings)
+        for i in range(0,1):
+            chains = []
+            for j in range(0, 10):
+                trial = reader.read()
+                adjacency = trial['graph']
+                adjacency = fix_adjacency_matrix(adjacency)
+                
+                colourings = trial['colourings:']
+                histogram = gen_histogram(adjacency, colourings)
+
+                chains.append(colourings)
+
+            print(colourings)
             
             valid = [10 if h[1] else 0 for h in histogram]
             # print(valid)
@@ -111,24 +117,20 @@ def main():
             # print(colourings)
             current = []
             rhat_values = []
-            counter = 0
-            for c in colourings:
-                current.append(c)
-                np_current = np.array(current)
-                # print(np_current)
-                arviz_type = arviz.convert_to_dataset(np_current)
-                value = arviz.rhat(np_current, method="rank")
-                rhat_values.append(value)
-                counter += 1
 
-                if counter == 1:
-                    continue
-                print(value)
-                if value < 1:
-                    print(counter)
+            for counter, c in enumerate(chains, start=1):
+                dataset = az.convert_to_dataset(np.array(c))
+                current.append(dataset)
+                
+                
+                rhat = az.rhat(current, method="rank")
+                rhat_values.append(rhat)
+                
+                print(f"R-hat after {counter} chain(s): {rhat}")
+                
+                if np.all(rhat < 1):
+                    print(f"Converged at chain {counter}")
                     break
-
-            # print(rhat_values)
 
             # rhat_values = arviz.rhat(colourings, method="rank")
 

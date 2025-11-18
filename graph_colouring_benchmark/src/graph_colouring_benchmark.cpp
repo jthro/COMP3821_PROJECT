@@ -35,14 +35,14 @@ int main() {
 		        std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
                 NaiveMetropolisRunner(g, std::pow(num_vertices, 2), 10, k, writer);
 
-		        std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);                
-                MiddletonBulsecoRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+		        // std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);                
+                // MiddletonBulsecoRunner(g, std::pow(num_vertices, 2), 10, k, writer);
 
-                std::println("Flip Dynamics | nV = {}, k = {}", num_vertices, k);
-                FlipDynamicsRunner(g, std::pow(num_vertices, 2), 10, k, writer);
+                // std::println("Flip Dynamics | nV = {}, k = {}", num_vertices, k);
+                // FlipDynamicsRunner(g, std::pow(num_vertices, 2), 10, k, writer);
                 
-                std::println("Sussy Baka 7 | nV = {}, k = {}", num_vertices, k);
-                SussyBaka7(g, std::pow(num_vertices, 2), 10, k, writer);  
+                // std::println("Sussy Baka 7 | nV = {}, k = {}", num_vertices, k);
+                // SussyBaka7(g, std::pow(num_vertices, 2), 10, k, writer);  
             }
         }
     }
