@@ -3,7 +3,7 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 import arviz as az
-# import threading 
+import threading 
 
 # PROCEDURE:
 # treat each sample as a histogram of colour frequencies
@@ -88,16 +88,59 @@ def verify_colouring(graph, colouring):
 
         return True
 
+def calc_mixing(chains):
+    rhat_list = []
+
+    # print(colourings)
+    
+    # valid = [10 if h[1] else 0 for h cin histogram]
+    # print(valid)
+
+    # print(colourings)
+    current = []
+    rhat_values = []
+
+    for counter, c in enumerate(chains, start=1):
+        np_chain = np.array(c)
+        
+        np_chain = np_chain[:, np.newaxis]
+        current.append(np_chain)
+
+    all_chains = np.stack(current, axis=0)
+
+    # print(all_chasins)
+
+    dataset = az.convert_to_dataset(all_chains)
+    # print(dataset)
+
+    rhat = az.rhat(dataset, method="rank")
+
+
+    rhat_list.append(rhat.to_array().values.flatten())
+
+    # NOTE IK THE BELOW IS V MUCH WRONG FOR NOW
+    cur = rhat_list[0]
+    # print(cur)
+    min_value = min(cur)
+    # 
+    min_index = np.argmin(cur)
+    # ]
+    print(min_value)
+    print(min_index)
+    print(rhat_list)
+
+
 def main():
-    print('ehllo')
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
     args = parser.parse_args()
 
-    print(args)
+    
 
     with jsonlines.open(args.filename, mode='r') as reader:
-        for i in range(0,1):
+        threads = []
+
+        for i in range(0,99):
             chains = []
             for j in range(0, 10):
                 trial = reader.read()
@@ -108,40 +151,16 @@ def main():
                 histogram = gen_histogram(adjacency, colourings)
 
                 chains.append(colourings)
+            t = threading.Thread(target=calc_mixing, args=(chains,))
+            threads.append(t)
 
-            print(colourings)
+        for t in threads:
+            t.start()
+
+        for t in threads:
+            t.join()
             
-            valid = [10 if h[1] else 0 for h in histogram]
-            # print(valid)
-
-            # print(colourings)
-            current = []
-            rhat_values = []
-
-            for counter, c in enumerate(chains, start=1):
-                dataset = az.convert_to_dataset(np.array(c))
-                current.append(dataset)
-                
-                
-                rhat = az.rhat(current, method="rank")
-                rhat_values.append(rhat)
-                
-                print(f"R-hat after {counter} chain(s): {rhat}")
-                
-                if np.all(rhat < 1):
-                    print(f"Converged at chain {counter}")
-                    break
-
-            # rhat_values = arviz.rhat(colourings, method="rank")
-
-            # print(arviz.rhat(colourings, method="rank"))
-            # print(colourings)
-            # for v in valid:
-            #     if (gelman_rubin(colourings) == 1):
-            #         print(v)
-            #         break
-
-
+            
             # for i,v in enumerate(valid):
             #     if not v == 0:
             #         print(i)
