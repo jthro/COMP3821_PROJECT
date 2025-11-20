@@ -25,7 +25,7 @@ def manimAnimation(graph, samples, k):
             for i in range(graph.size):
                 for j in graph.neighbors(i):
                     if j > i:
-                        edge = Line(pos[i], pos[j], stroke_width=2, color=GRAY)
+                        edge = Line(pos[i], pos[j], stroke_width=3, color=GRAY)
                         edges.append(edge)
 
             number = Text(f"Frame: 0", font_size=36).to_corner(UP + RIGHT)

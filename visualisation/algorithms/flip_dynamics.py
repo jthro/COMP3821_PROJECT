@@ -1,7 +1,7 @@
 import numpy as np
 from collections import deque
 
-def flipDynamics(graph, k, num_steps, start_colouring):
+def flip_dynamics(graph, k, num_steps, start_colouring):
     current = start_colouring.copy()
     samples = [current.copy()]
 
@@ -17,7 +17,7 @@ def flipDynamics(graph, k, num_steps, start_colouring):
             c = np.random.randint(0, k)
 
         cluster = set([v])
-        queue = queue([v])
+        queue = deque([v])
 
         while queue:
             u = queue.pop()
