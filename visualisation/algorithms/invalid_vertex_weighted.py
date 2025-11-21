@@ -39,6 +39,7 @@ def invalid_vertex_weighted(graph, k, num_steps, start_colouring):
 
         v = np.random.randint(0, graph.size)
 
+        best_colour = np.argmin(invalid_neutral_array)
         old_colour = current[v]
 
         # Update
