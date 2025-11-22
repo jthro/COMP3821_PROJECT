@@ -12,7 +12,7 @@ dependencies = [
     "matplotlib (>=3.10.7,<4.0.0)",
     "numpy (>=2.3.4,<3.0.0)",
     "arviz (>=0.21.0, <0.22.0)",
-    "threading",
+    "pandas (>=2.3.3,<3.0.0)",
 ]
 
 [tool.poetry]
