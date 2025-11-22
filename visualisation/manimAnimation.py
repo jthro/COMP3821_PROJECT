@@ -17,7 +17,7 @@ def manimAnimation(graph, samples, k):
             nodes = {}
             for i in range(graph.size):
                 node_colour = colour_map[samples[0][i] % len(colour_map)]
-                circle = Circle(radius=0.2, color=WHITE, fill_opacity=1).move_to(pos[i])
+                circle = Circle(radius=0., color=WHITE, fill_opacity=1).move_to(pos[i])
                 circle.set_fill(node_colour)
                 nodes[i] = circle
 
