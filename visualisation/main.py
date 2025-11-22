@@ -7,6 +7,7 @@ import json
 from .graph import Graph
 from .manimAnimation import manimAnimation
 from .matplotlibAnimation import matplotlibAnimation
+from .path_coupling_manim import manimPathCouplingAnimation
 
 def main():
     parser = argparse.ArgumentParser(description="3821 Visualisations")
@@ -40,14 +41,18 @@ def main():
         start_colouring = np.random.randint(0, k, g.size)
         if args.algo == "pathCoupling":
             start_colouring2 = np.random.randint(0, k, g.size)
-            samples1, samples2 = function(g, k, num_steps, start_colouring, start_colouring2)
+            x_samples, y_samples, distances = function(g, k, num_steps, start_colouring, start_colouring2)
         else:
             samples = function(g, k, num_steps, start_colouring)
 
     if args.visualiser == "manim":
-        SceneClass = manimAnimation(g, samples, k)
+
+        if args.algo == "pathCoupling":
+            SceneClass = manimPathCouplingAnimation(g, x_samples, y_samples, distances, k)
+        else:
+            SceneClass = manimAnimation(g, samples, k)
         scene = SceneClass()
-        scene.render() 
+        scene.render()
     else:
         matplotlibAnimation(g, samples)
 
