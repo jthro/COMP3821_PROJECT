@@ -2,16 +2,17 @@
 #pragma once
 
 #include <algorithm>
+#include <cassert>
 #include <cstddef>
 #include <cstdint>
 #include <numeric>
 #include <print>
+#include <queue>
 #include <random>
 #include <ranges>
+#include <set>
 #include <tuple>
 #include <vector>
-#include <set>
-#include <queue>
 
 #include "jsonl.hpp"
 
@@ -61,6 +62,18 @@ inline auto random_adjacency_matrix(size_t n_v, size_t degree) -> AdjacencyMatri
     }
 
     return AdjacencyMatrix{matrix};
+}
+
+inline auto cursed_adjacency_matrix(size_t n_v) -> AdjacencyMatrix {
+    std::vector<std::vector<bool>> m(n_v, std::vector<bool>(n_v, false));
+    std::fill(m[0].begin(), m[0].end(), true);
+    for (std::size_t i = 0; i < n_v; i++) {
+        std::println("{}", i);
+        m[i][0] = true;
+        m[i][i] = true;
+    }
+
+    return static_cast<AdjacencyMatrix>(m);
 }
 
 class ColouredGraph {
@@ -159,7 +172,6 @@ class NaiveMetropolisRunner {
         : m_graph(graph),
           m_vertex_gen{std::random_device{}()},
           m_colour_gen{std::random_device{}()} {
-        
         m_hist.emplace_back(m_graph.get_colouring());
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
@@ -170,11 +182,9 @@ class NaiveMetropolisRunner {
     }
 
     explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, size_t degree,
-                                   colour n_colours, std::mt19937& vertex_seed, std::mt19937& colour_seed, JsonlWriter& writer)
-        : m_graph(graph),
-          m_vertex_gen{vertex_seed},
-          m_colour_gen{colour_seed} {
-        
+                                   colour n_colours, std::mt19937& vertex_seed,
+                                   std::mt19937& colour_seed, JsonlWriter& writer)
+        : m_graph(graph), m_vertex_gen{vertex_seed}, m_colour_gen{colour_seed} {
         m_hist.emplace_back(m_graph.get_colouring());
         m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
         m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
@@ -183,7 +193,19 @@ class NaiveMetropolisRunner {
                      "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
                      n_colours);
     }
-    
+
+    explicit NaiveMetropolisRunner(ColouredGraph& graph, size_t reps, std::string graph_type,
+                                   colour n_colours, std::mt19937& vertex_seed,
+                                   std::mt19937& colour_seed, JsonlWriter& writer)
+        : m_graph(graph), m_vertex_gen{vertex_seed}, m_colour_gen{colour_seed} {
+        m_hist.emplace_back(m_graph.get_colouring());
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
+        for (size_t i : std::ranges::iota_view{0uz, reps}) NaiveMetropolis();
+        writer.write("chain", "naive-metropolis", "graph", m_graph.get_adjacency(),
+                     "colourings:", m_hist, "nv", graph.num_vertices(), "shape", graph_type.c_str(),
+                     "k", n_colours);
+    }
 };
 
 class MiddletonBulsecoRunner {
@@ -262,105 +284,124 @@ class MiddletonBulsecoRunner {
                      "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
                      n_colours);
     }
+
+    explicit MiddletonBulsecoRunner(ColouredGraph& graph, size_t reps, std::string graph_type,
+                                    colour n_colours, std::mt19937& vertex_seed,
+                                    std::mt19937& colour_seed, JsonlWriter& writer)
+        : m_graph(graph),
+          m_colour_frequency(n_colours),
+          m_vertex_gen{vertex_seed},
+          m_colour_gen{colour_seed} {
+        // usual setup
+        m_hist.emplace_back(m_graph.get_colouring());
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        // initialise colour frequency from first colouring
+        for (colour c : graph.get_colouring()) {
+            m_colour_frequency[c]++;
+        }
+
+        for (size_t i : std::ranges::iota_view{0uz, reps}) MiddletonBulseco();
+        writer.write("chain", "middleton-bulseco", "graph", m_graph.get_adjacency(), "colourings",
+                     m_hist, "nv", graph.num_vertices(), "shape", graph_type.c_str(), "k",
+                     n_colours);
+    }
 };
 
 class FlipDynamicsRunner {
-    private:
-        ColouredGraph& m_graph;
-        std::vector<std::vector<colour>> m_hist;
-        std::mt19937 m_vertex_gen{std::random_device{}()};
-        std::mt19937 m_colour_gen{std::random_device{}()};
-        std::uniform_int_distribution<> m_vertex_dist;
-        std::uniform_int_distribution<> m_colour_dist;
+   private:
+    ColouredGraph& m_graph;
+    std::vector<std::vector<colour>> m_hist;
+    std::mt19937 m_vertex_gen{std::random_device{}()};
+    std::mt19937 m_colour_gen{std::random_device{}()};
+    std::uniform_int_distribution<> m_vertex_dist;
+    std::uniform_int_distribution<> m_colour_dist;
 
-        std::vector<int> neighbours(int u, ColouredGraph& graph) const {
-            std::vector<int> neighbours(int u);
-            std::vector<int> neighbourList;
-            for (int i = 0; i < graph.num_vertices(); i++) {
-                if (graph.get_adjacency()[u][i] == 1) {
-                    neighbourList.push_back(i);
-                }
+    std::vector<int> neighbours(int u, ColouredGraph& graph) const {
+        std::vector<int> neighbours(int u);
+        std::vector<int> neighbourList;
+        for (int i = 0; i < graph.num_vertices(); i++) {
+            if (graph.get_adjacency()[u][i] == 1) {
+                neighbourList.push_back(i);
             }
-            return neighbourList;
+        }
+        return neighbourList;
+    }
+
+    auto Flip() -> bool {
+        int Pl = 1;
+
+        auto current = m_graph.get_colouring();
+
+        int v = m_vertex_dist(m_vertex_gen);
+        colour b = current[v];
+        colour c = m_colour_dist(m_colour_gen);
+
+        while (c == b) {
+            c = m_colour_dist(m_colour_gen);
         }
 
-        auto Flip() -> bool {
-            int Pl = 1;
-            
-            auto current = m_graph.get_colouring();
+        std::set<int> cluster;
+        std::queue<int> queue;
 
-            int v = m_vertex_dist(m_vertex_gen);
-            colour b = current[v];
-            colour c = m_colour_dist(m_colour_gen);
+        queue.push(v);
+        cluster.insert(v);
 
-            while (c == b) {
-                c = m_colour_dist(m_colour_gen);
+        while (!queue.empty()) {
+            int u = queue.front();
+            queue.pop();
+            colour u_colour = current[u];
+            int target_colour;
+            if (u_colour == b) {
+                target_colour = c;
+            } else {
+                target_colour = b;
             }
+            std::vector<int> neighbour = neighbours(u, m_graph);
+            for (int n = 0; n < neighbour.size(); n++) {
+                if (current[n] == target_colour && !(cluster.contains(n))) {
+                    cluster.insert(n);
+                    queue.push(n);
+                }
+            }
+        }
 
-            std::set<int> cluster;
-            std::queue<int> queue;
+        int l = cluster.size();
+        bool accept = false;
 
-            queue.push(v);
-            cluster.insert(v);
+        std::random_device rd;
+        std::mt19937 gen{rd()};
+        std::uniform_real_distribution<double> dist(0.0, 1.0);
+        double r = dist(gen);
 
-            while (!queue.empty()) {
-                int u = queue.front();
-                queue.pop();
-                colour u_colour = current[u];
-                int target_colour;
-                if (u_colour == b) {
-                    target_colour = c;
+        if (l > 0 && r < double(Pl) / l) {
+            accept = true;
+            for (const auto& u : cluster) {
+                if (current[u] == b) {
+                    m_graph.recolour(u, c);
                 } else {
-                    target_colour = b;
-                }
-                std::vector<int> neighbour = neighbours(u, m_graph);
-                for (int n = 0; n < neighbour.size(); n++) {
-                    if (current[n] == target_colour && !(cluster.contains(n))) {
-                        cluster.insert(n);
-                        queue.push(n);
-                    }
+                    m_graph.recolour(u, b);
                 }
             }
-
-            int l = cluster.size();
-            bool accept = false;
-
-            std::random_device rd;
-            std::mt19937 gen{rd()};
-            std::uniform_real_distribution<double> dist(0.0, 1.0);
-            double r = dist(gen);
-
-            if (l > 0 && r < double(Pl) / l) {
-                accept = true;
-                for (const auto& u : cluster) {
-                    if (current[u] == b) {
-                        m_graph.recolour(u, c);
-                    } else {
-                        m_graph.recolour(u, b);
-                    }
-                }
-            }
-
-            m_hist.push_back(m_graph.get_colouring());
-            return accept;
         }
 
-    public:
-        explicit FlipDynamicsRunner(
-            ColouredGraph& graph, size_t reps, size_t degree,
-            colour n_colours, JsonlWriter& writer)
-            : m_graph(graph)
-        {
-            m_hist.emplace_back(m_graph.get_colouring());
-            m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
-            m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
+        m_hist.push_back(m_graph.get_colouring());
+        return accept;
+    }
 
-            for (size_t i : std::ranges::iota_view{0uz, reps}) Flip();
+   public:
+    explicit FlipDynamicsRunner(ColouredGraph& graph, size_t reps, size_t degree, colour n_colours,
+                                JsonlWriter& writer)
+        : m_graph(graph) {
+        m_hist.emplace_back(m_graph.get_colouring());
+        m_vertex_dist = std::uniform_int_distribution<>(0, graph.num_vertices() - 1);
+        m_colour_dist = std::uniform_int_distribution<>(0, n_colours - 1);
 
-            writer.write("chain", "flip-dynamics", "graph", m_graph.get_adjacency(),
-                        "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
-                        n_colours);
-        }
+        for (size_t i : std::ranges::iota_view{0uz, reps}) Flip();
+
+        writer.write("chain", "flip-dynamics", "graph", m_graph.get_adjacency(),
+                     "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
+                     n_colours);
+    }
 };
 
 // class SussyBaka7Runner {
@@ -368,7 +409,7 @@ class FlipDynamicsRunner {
 //         ColouredGraph& m_graph;
 //             std::vector<std::vector<colour>> m_hist;
 //         std::mt19937 m_vertex_gen{std::random_device{}()};
-//         // added a tie break 
+//         // added a tie break
 //         std::mt19937 m_tiebreak_gen{std::random_device[]()};
 //         std::uniform_int_distribution<> m_vertex_dist;
 //         std::vector<std::vector<int>> invalid_nautral;
@@ -406,5 +447,5 @@ class FlipDynamicsRunner {
 //             writer.write("chain", "sussy-baka-7", "graph", m_graph.get_adjacency(),
 //                         "colourings:", m_hist, "nv", graph.num_vertices(), "d", degree, "k",
 //                         n_colours);
-//         }    
+//         }
 // }

@@ -28,23 +28,40 @@ int main() {
     //     }
 
     for (int num_vertices = 20; num_vertices <= 30; num_vertices += 2) {
-        for (int k = 10; k <= 30; k += 10) {
-            for (int rep = 0; rep < 1000; rep++) {
-                std::mt19937 colour_seed{std::random_device{}()};
-                std::mt19937 vertex_seed{std::random_device{}()};
+        auto cursed = cursed_adjacency_matrix(num_vertices);
+        auto normal = random_adjacency_matrix(num_vertices, 10);
 
-                AdjacencyMatrix m{random_adjacency_matrix(num_vertices, 10)};
-                std::vector<colour> initial_colour{
-                    ColouredGraph::generate_colouring(num_vertices, k)};
+        for (int rep = 0; rep < 1000; rep++) {
+            std::mt19937 colour_seed{std::random_device{}()};
+            std::mt19937 vertex_seed{std::random_device{}()};
 
-                ColouredGraph metropolis{m, initial_colour};
-                ColouredGraph middleton_bulseco{m, initial_colour};
+            std::vector<colour> initial_colour_normal{
+                ColouredGraph::generate_colouring(num_vertices, 10)};
+            
+            std::vector<colour> initial_colour_cursed{
+                ColouredGraph::generate_colouring(num_vertices, 3)};
 
-                std::println("Naive Metropolis  | nV = {}, k = {}", num_vertices, k);
-                NaiveMetropolisRunner(metropolis, std::pow(num_vertices, 2), 10, k, vertex_seed, colour_seed, writer);
-                std::println("Middleton-Bulseco | nV = {}, k = {}", num_vertices, k);
-                MiddletonBulsecoRunner(middleton_bulseco, std::pow(num_vertices, 2), 10, k, vertex_seed, colour_seed, writer);
-            }
+            ColouredGraph metropolis_cursed{cursed, initial_colour_cursed};
+            ColouredGraph middleton_bulseco_cursed{cursed, initial_colour_cursed};
+
+            ColouredGraph metropolis_normal{normal, initial_colour_normal};
+            ColouredGraph middleton_bulseco_normal{normal, initial_colour_normal};
+
+            std::println("Naive Metropolis Cursed  | nV = {}, rep = {}", num_vertices, rep);
+            NaiveMetropolisRunner(metropolis_cursed, 100, "star", 3, vertex_seed, colour_seed,
+                                  writer);
+
+            std::println("Middleton-Bulseco Cursed | nV = {}, rep = {}", num_vertices, rep);
+            MiddletonBulsecoRunner(middleton_bulseco_cursed, 100, "star", 3, vertex_seed,
+                                   colour_seed, writer);
+
+            std::println("Naive Metropolis Normal  | nV = {}, rep = {}", num_vertices, rep);
+            NaiveMetropolisRunner(metropolis_normal, 100, "10-regular", 10, vertex_seed,
+                                  colour_seed, writer);
+
+            std::println("Middleton-Bulseco Normal | nV = {}, rep = {}", num_vertices, rep);
+            MiddletonBulsecoRunner(middleton_bulseco_normal, 100, "10-regular", 10, vertex_seed,
+                                   colour_seed, writer);
         }
     }
 }
