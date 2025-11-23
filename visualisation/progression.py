@@ -25,7 +25,7 @@ class GraphCreation(Scene):
         edge_pairs = [(0, 1), (0, 2)]
         edges = []
         for i, j in edge_pairs:
-            edge = Line(nodes[i].get_center(), nodes[j].get_center(), stroke_width=3, color=EDGE_COLOR)
+            edge = Line(nodes[i].get_center(), nodes[j].get_center(), stroke_width=3, color=GREY_B)
             edges.append(edge)
             mob.add(edge)
 
@@ -60,7 +60,7 @@ class GraphCreation(Scene):
 
         edges2 = []
         for i, j in edge_pairs:
-            edge = Line(nodes2[i].get_center(), nodes2[j].get_center(), stroke_width=3, color=EDGE_COLOR)
+            edge = Line(nodes2[i].get_center(), nodes2[j].get_center(), stroke_width=3, color=GREY_B)
             edges2.append(edge)
             mob.add(edge)
 
@@ -86,7 +86,7 @@ class GraphCreation(Scene):
 
         edges3 = []
         for i, j in edge_pairs:
-            edge = Line(nodes3[i].get_center(), nodes3[j].get_center(), stroke_width=3, color=EDGE_COLOR)
+            edge = Line(nodes3[i].get_center(), nodes3[j].get_center(), stroke_width=3, color=GREY_B)
             edges3.append(edge)
             mob.add(edge)
 
@@ -100,7 +100,7 @@ class GraphCreation(Scene):
 
         edges4 = []
         for i, j in edge_pairs:
-            edge = Line(nodes4[i].get_center(), nodes4[j].get_center(), stroke_width=3, color=EDGE_COLOR)
+            edge = Line(nodes4[i].get_center(), nodes4[j].get_center(), stroke_width=3, color=GREY_B)
             edges4.append(edge)
             mob.add(edge)
 
@@ -114,7 +114,7 @@ class GraphCreation(Scene):
 
         edges5 = []
         for i, j in edge_pairs:
-            edge = Line(nodes5[i].get_center(), nodes5[j].get_center(), stroke_width=3, color=EDGE_COLOR)
+            edge = Line(nodes5[i].get_center(), nodes5[j].get_center(), stroke_width=3, color=GREY_B)
             edges5.append(edge)
             mob.add(edge)
 
