@@ -15,9 +15,10 @@ def manimAnimation(graph, samples, k):
             pos = {n: np.array([p[0], p[1], 0]) * scale for n, p in pos.items()}
 
             nodes = {}
+            print(graph.size)
             for i in range(graph.size):
                 node_colour = colour_map[samples[0][i] % len(colour_map)]
-                circle = Circle(radius=0., color=WHITE, fill_opacity=1).move_to(pos[i])
+                circle = Circle(radius=0.3, color=WHITE, fill_opacity=1).move_to(pos[i])
                 circle.set_fill(node_colour)
                 nodes[i] = circle
 
