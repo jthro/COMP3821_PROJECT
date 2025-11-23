@@ -16,6 +16,7 @@ def parse_obj(obj) -> DataEntry:
         "chain_name": obj["chain"],
         "colourings": obj["colourings:"],
         "k": obj["k"],
+        "shape": obj["shape"],
         "nv": obj["nv"],
         "graph": fix_adjacency_matrix(obj["graph"]),
     }
@@ -24,7 +25,7 @@ def parse_obj(obj) -> DataEntry:
 def process_entry_first_valid_colouring(trial: DataEntry):
     return {
         "chain_name": trial["chain_name"],
-        "k": trial["k"],
+        "shape": trial["shape"],
         "nv": trial["nv"],
         "mixing_time": first_valid_colouring(trial["graph"], trial["colourings"]),
     }

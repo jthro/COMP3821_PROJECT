@@ -9,7 +9,7 @@ Colouring = List[int]
 class DataEntry(TypedDict):
     chain_name: str
     colourings: List[Colouring]
-    k: int
+    shape: str
     nv: int
     graph: AdjacencyMatrix
     

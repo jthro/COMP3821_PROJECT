@@ -8,10 +8,10 @@ def aggregate_metric(entries, metric_key):
 
     for e in entries:
         chain = e["chain_name"]
-        k = e["k"]
+        shape = e["shape"]
         nv = e["nv"]
         value = e[metric_key]
-        table[chain][k][nv].append(value)
+        table[chain][shape][nv].append(value)
 
     stats = {}
     for chain, ks in table.items():
@@ -31,7 +31,7 @@ DEFAULT_COLOURS = {"middleton-bulseco": "blue", "naive-metropolis": "red"}
 
 
 def plot_metric(stats, metric_name, colours=DEFAULT_COLOURS):
-    all_ks = sorted({k for chain in stats.values() for k in chain.keys()}, key=int)
+    all_ks = sorted({k for chain in stats.values() for k in chain.keys()}, key=str)
 
     fig, axes = plt.subplots(len(all_ks), 1, figsize=(8, 4 * len(all_ks)), sharex=True)
 
@@ -39,7 +39,7 @@ def plot_metric(stats, metric_name, colours=DEFAULT_COLOURS):
         axes = [axes]
 
     for ax, k in zip(axes, all_ks):
-        ax.set_title(f"{metric_name} vs. nV (k={k})")
+        ax.set_title(f"Mean Steps to First Colouring vs. |V| ({k})")
 
         for chain, chain_stats in stats.items():
             if k not in chain_stats:
@@ -57,9 +57,9 @@ def plot_metric(stats, metric_name, colours=DEFAULT_COLOURS):
                 color=colours.get(chain, None),
             )
 
-        ax.set_ylabel(metric_name)
+        ax.set_ylabel("Time to First Colouring")
         ax.legend()
 
-    axes[-1].set_xlabel("nv")
+    axes[-1].set_xlabel("|V|")
     plt.tight_layout()
     plt.show()

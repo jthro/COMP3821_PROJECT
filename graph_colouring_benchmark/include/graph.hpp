@@ -301,7 +301,7 @@ class MiddletonBulsecoRunner {
         }
 
         for (size_t i : std::ranges::iota_view{0uz, reps}) MiddletonBulseco();
-        writer.write("chain", "middleton-bulseco", "graph", m_graph.get_adjacency(), "colourings",
+        writer.write("chain", "middleton-bulseco", "graph", m_graph.get_adjacency(), "colourings:",
                      m_hist, "nv", graph.num_vertices(), "shape", graph_type.c_str(), "k",
                      n_colours);
     }

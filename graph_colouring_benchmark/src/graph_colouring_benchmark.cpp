@@ -56,11 +56,11 @@ int main() {
                                    colour_seed, writer);
 
             std::println("Naive Metropolis Normal  | nV = {}, rep = {}", num_vertices, rep);
-            NaiveMetropolisRunner(metropolis_normal, 100, "10-regular", 10, vertex_seed,
+            NaiveMetropolisRunner(metropolis_normal, 100, "10-regular", 11, vertex_seed,
                                   colour_seed, writer);
 
             std::println("Middleton-Bulseco Normal | nV = {}, rep = {}", num_vertices, rep);
-            MiddletonBulsecoRunner(middleton_bulseco_normal, 100, "10-regular", 10, vertex_seed,
+            MiddletonBulsecoRunner(middleton_bulseco_normal, 100, "10-regular", 11, vertex_seed,
                                    colour_seed, writer);
         }
     }
