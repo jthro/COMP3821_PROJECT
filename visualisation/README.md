@@ -8,4 +8,6 @@ The manim video will show up in \
 
 To run the progression video, install manim locally and run `manim -qm progression.py GraphCreation`\
 
+To run code for jsonl data, run `poetry run visualise --algo colouring --visualiser manim --file <filename>`
+
 The matplotlib animation should show on the screen (idk how to save them)
