@@ -1,11 +1,5 @@
 from manim import *
 
-TITLE_COLOR = GREEN_E
-SUBTITLE_COLOR = GREY_B
-ACCENT_COLOR = GREEN_C
-NODE_COLOR = GREY_E
-EDGE_COLOR = GREY_B
-
 class GraphCreation(Scene):
     def construct(self):
         colour_map = color_gradient([RED, BLUE], 2)
@@ -19,7 +13,7 @@ class GraphCreation(Scene):
         mob = VGroup()
 
         scale_factor = 0.8
-        
+
         nodes = {}
         for i in range(3):
             circle = Circle(radius=0.3, color=WHITE, fill_opacity=1)

@@ -19,7 +19,7 @@ def update(graph, colouring, v, c):
     colouring[v] = c
     return colouring
 
-def pathCoupling(graph, k, num_steps, start_colouring, start_colouring2):
+def coupling(graph, k, num_steps, start_colouring, start_colouring2):
     x = start_colouring.copy()
     y = start_colouring2.copy()
 
