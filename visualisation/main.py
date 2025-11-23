@@ -15,11 +15,12 @@ def main():
     parser.add_argument("--visualiser", required=True)
     parser.add_argument("--size", required=False)
     parser.add_argument("--steps", required=False)
+    parser.add_argument("--file", required=False)
 
     args = parser.parse_args()
 
     if args.algo == "colouring":
-        with open("visualisation/output8.jsonl", "r") as f:
+        with open("visualisation/" + args.file, "r") as f:
             data = json.loads(f.read())
 
         samples = data["colourings:"]
