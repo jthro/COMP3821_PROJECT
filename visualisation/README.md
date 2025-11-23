@@ -1,9 +1,11 @@
 # How to run
 
 From the root directory of the repo run:\
-`python3 -m visualisation --algo [metropolis/flipDynamics] --visualiser [manim/matplotlib] --size [size of graph]`\
+`poetry run visualise --algo <algo> --visualiser <manim/matplotlib> --size <size> --steps <num-steps>`\
 
 The manim video will show up in \
 `media/videos/1080p60/GraphColouringAnimation.mp4`\
+
+To run the progression video, install manim locally and run `manim -qm progression.py GraphCreation`\
 
 The matplotlib animation should show on the screen (idk how to save them)
